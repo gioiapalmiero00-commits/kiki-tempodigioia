@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Lascia un'idea a Kiki | Kiki, Tempo di Gioia</title>
-<meta name="description" content="Cosa vorresti che esistesse nel mondo dell'uncinetto e della maglia? Raccontamelo: le tue idee possono diventare i prossimi pattern." />
+<meta name="description" content="Cosa vorresti che esistesse nel mondo dell'uncinetto e della maglia? Scrivimelo con parole tue, o fatti guidare da qualche domanda di design: le tue idee possono diventare i prossimi pattern." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..900&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -36,32 +36,120 @@
   <div class="wrap">
     <span class="eyebrow">Partecipa</span>
     <h1>Cosa vorresti che<br/>esistesse, e ancora non c'è?</h1>
-    <p class="lede">Sono Gioia. Progetto pattern all'uncinetto e ai ferri, e le prossime idee non voglio deciderle solo io: raccontami cosa ti manca, cosa vorresti provare a fare, cosa non trovi in giro — anche solo un'intuizione vaga va benissimo.</p>
+    <p class="lede">Sono Gioia. Progetto pattern all'uncinetto e ai ferri, e le prossime idee non voglio deciderle solo io: raccontami cosa ti manca — con parole tue, oppure fatti guidare da qualche domanda, come preferisci.</p>
   </div>
 </section>
 
 <section class="section-cream">
   <div class="wrap" style="max-width:720px">
-    <div class="card" style="padding:clamp(28px,4vw,48px)">
-      <form id="idea-form" data-idea-form action="https://formspree.io/f/FORM_ID_IDEE_DA_SOSTITUIRE" method="POST">
-        <div style="margin-bottom:22px">
-          <label for="idea" style="display:block;font-weight:700;margin-bottom:10px">La tua idea o il tuo desiderio</label>
-          <textarea id="idea" name="idea" required rows="5" placeholder="Es: vorrei un pattern pensato per chi ha le mani alle prime armi ma non vuole fare 'la solita sciarpa'..." style="width:100%;padding:14px 16px;border-radius:var(--radius-md);border:2px solid rgba(28,20,15,0.15);font-family:var(--font-body);font-size:1rem;resize:vertical"></textarea>
+
+    <div class="card" id="mode-choice" style="padding:clamp(28px,4vw,48px);text-align:center">
+      <p class="lede" style="margin-inline:auto;margin-bottom:24px">Puoi scrivermi liberamente, oppure farti guidare dalle stesse domande di design che mi faccio io prima di iniziare un progetto — forma, costruzione, dettaglio. In entrambi i casi l'idea arriva a me allo stesso modo.</p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+        <button type="button" class="btn btn-outline" data-choose-mode="free">Scrivila con parole mie</button>
+        <button type="button" class="btn btn-primary" data-choose-mode="guided">Fatti guidare, un passo alla volta</button>
+      </div>
+    </div>
+
+    <div class="quiz-card" id="mode-guided" hidden style="padding:clamp(28px,4vw,48px)">
+      <button type="button" class="btn btn-outline" data-back-to-choice style="margin-bottom:22px">← Cambia modalità</button>
+
+      <div class="quiz-intro">
+        <span class="eyebrow">5 scelte di design</span>
+        <h2>Che capo hai in mente?</h2>
+        <p class="lede">Rispondi come faresti a te stessa: non c'è una risposta giusta, solo la tua. Alla fine componiamo insieme il messaggio da mandarmi.</p>
+      </div>
+
+      <div class="quiz-progress" aria-hidden="true">
+        <span class="quiz-progress-label">Passo <span data-step-current>1</span> di 5</span>
+        <div class="quiz-progress-track">
+          <div class="quiz-progress-fill" data-progress-fill></div>
         </div>
-        <div class="idea-form-grid">
-          <div>
-            <label for="nome" style="display:block;font-weight:700;margin-bottom:8px;font-size:0.9rem">Nome o nickname <span style="opacity:0.6;font-weight:400">(opzionale)</span></label>
-            <input type="text" id="nome" name="nome" placeholder="Come ti chiami?" style="width:100%;padding:12px 16px;border-radius:999px;border:2px solid rgba(28,20,15,0.15);font-family:var(--font-body);font-size:1rem" />
-          </div>
-          <div>
-            <label for="email" style="display:block;font-weight:700;margin-bottom:8px;font-size:0.9rem">Email <span style="opacity:0.6;font-weight:400">(opzionale)</span></label>
-            <input type="email" id="email" name="email" placeholder="Se vuoi essere avvisata" style="width:100%;padding:12px 16px;border-radius:999px;border:2px solid rgba(28,20,15,0.15);font-family:var(--font-body);font-size:1rem" />
+      </div>
+
+      <form id="capo-form">
+        <div class="quiz-step" data-step="1">
+          <h3>Che tipo di capo?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="tipo" value="Un top o una maglia leggera" required /><span>Un top o una maglia</span></label>
+            <label class="quiz-option"><input type="radio" name="tipo" value="Un cardigan o una giacca" /><span>Un cardigan o una giacca</span></label>
+            <label class="quiz-option"><input type="radio" name="tipo" value="Un abito" /><span>Un abito</span></label>
+            <label class="quiz-option"><input type="radio" name="tipo" value="Un accessorio — borsa, cappello o sciarpa" /><span>Un accessorio</span></label>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary">Invia la tua idea</button>
-        <p class="form-note" style="color:var(--color-ink);opacity:0.65">Lascia l'email solo se vuoi che ti avvisi nel caso la tua idea diventi davvero un pattern. Zero spam, zero liste a cui non hai chiesto di iscriverti.</p>
-        <p class="form-success" role="status" style="color:var(--color-raspberry)"></p>
+
+        <div class="quiz-step" data-step="2" hidden>
+          <h3>Che silhouette ha?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="silhouette" value="aderente e minimal" required /><span>Aderente e minimal</span></label>
+            <label class="quiz-option"><input type="radio" name="silhouette" value="oversize e avvolgente" /><span>Oversize e avvolgente</span></label>
+            <label class="quiz-option"><input type="radio" name="silhouette" value="strutturata, quasi scultorea" /><span>Strutturata, quasi scultorea</span></label>
+          </div>
+        </div>
+
+        <div class="quiz-step" data-step="3" hidden>
+          <h3>Come lo costruiresti?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="costruzione" value="circolare, senza cuciture" required /><span>Circolare, senza cuciture</span></label>
+            <label class="quiz-option"><input type="radio" name="costruzione" value="dall'alto verso il basso (top-down)" /><span>Dall'alto verso il basso</span></label>
+            <label class="quiz-option"><input type="radio" name="costruzione" value="a pezzi separati, poi assemblati" /><span>A pezzi separati, poi assemblati</span></label>
+          </div>
+        </div>
+
+        <div class="quiz-step" data-step="4" hidden>
+          <h3>Che dettaglio lo rende riconoscibile?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="dettaglio" value="un contrasto di colore o di punto ben visibile" required /><span>Un contrasto di colore o punto</span></label>
+            <label class="quiz-option"><input type="radio" name="dettaglio" value="una manica o uno scollo fuori dal comune" /><span>Una manica o uno scollo particolare</span></label>
+            <label class="quiz-option"><input type="radio" name="dettaglio" value="una texture a rilievo, non punto liscio" /><span>Una texture a rilievo</span></label>
+            <label class="quiz-option"><input type="radio" name="dettaglio" value="nessun dettaglio speciale — la forma basta da sola" /><span>Nessuno: basta la forma</span></label>
+          </div>
+        </div>
+
+        <div class="quiz-step" data-step="5" hidden>
+          <h3>E i colori?</h3>
+          <div class="quiz-options">
+            <label class="quiz-option"><input type="radio" name="palette" value="toni naturali e delicati" required /><span>Toni naturali e delicati</span></label>
+            <label class="quiz-option"><input type="radio" name="palette" value="colori accesi, a contrasto" /><span>Colori accesi, a contrasto</span></label>
+            <label class="quiz-option"><input type="radio" name="palette" value="monocromo, quasi grafico" /><span>Monocromo, quasi grafico</span></label>
+          </div>
+        </div>
+
+        <div class="quiz-nav">
+          <button type="button" class="btn btn-outline" data-nav-back hidden>Indietro</button>
+          <button type="button" class="btn btn-primary" data-nav-next>Avanti</button>
+          <button type="submit" class="btn btn-primary" data-nav-submit hidden>Componi il messaggio</button>
+        </div>
       </form>
+    </div>
+
+    <div id="mode-free" hidden>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px">
+        <button type="button" class="btn btn-outline" data-back-to-choice>← Cambia modalità</button>
+        <button type="button" class="btn btn-outline" data-redo-guided hidden>↺ Rifai le domande</button>
+      </div>
+
+      <div class="card" style="padding:clamp(28px,4vw,48px)">
+        <form id="idea-form" data-idea-form action="https://formspree.io/f/FORM_ID_IDEE_DA_SOSTITUIRE" method="POST">
+          <div style="margin-bottom:22px">
+            <label for="idea" style="display:block;font-weight:700;margin-bottom:10px">La tua idea o il tuo desiderio</label>
+            <textarea id="idea" name="idea" required rows="5" placeholder="Es: vorrei un pattern pensato per chi ha le mani alle prime armi ma non vuole fare 'la solita sciarpa'..." style="width:100%;padding:14px 16px;border-radius:var(--radius-md);border:2px solid rgba(28,20,15,0.15);font-family:var(--font-body);font-size:1rem;resize:vertical"></textarea>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px">
+            <div>
+              <label for="nome" style="display:block;font-weight:700;margin-bottom:8px;font-size:0.9rem">Nome o nickname <span style="opacity:0.6;font-weight:400">(opzionale)</span></label>
+              <input type="text" id="nome" name="nome" placeholder="Come ti chiami?" style="width:100%;padding:12px 16px;border-radius:999px;border:2px solid rgba(28,20,15,0.15);font-family:var(--font-body);font-size:1rem" />
+            </div>
+            <div>
+              <label for="email" style="display:block;font-weight:700;margin-bottom:8px;font-size:0.9rem">Email <span style="opacity:0.6;font-weight:400">(opzionale)</span></label>
+              <input type="email" id="email" name="email" placeholder="Se vuoi essere avvisata" style="width:100%;padding:12px 16px;border-radius:999px;border:2px solid rgba(28,20,15,0.15);font-family:var(--font-body);font-size:1rem" />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Invia la tua idea</button>
+          <p class="form-note" style="color:var(--color-ink);opacity:0.65">Lascia l'email solo se vuoi che ti avvisi nel caso la tua idea diventi davvero un pattern. Zero spam, zero liste a cui non hai chiesto di iscriverti.</p>
+          <p class="form-success" role="status" style="color:var(--color-raspberry)"></p>
+        </form>
+      </div>
     </div>
 
     <div style="margin-top:32px;text-align:center">
@@ -82,13 +170,127 @@
 document.getElementById("year").textContent = new Date().getFullYear();
 
 (function () {
-  var params = new URLSearchParams(window.location.search);
-  var prefill = params.get("prefill");
-  if (prefill) {
-    var textarea = document.getElementById("idea");
-    textarea.value = prefill;
+  var modeChoice = document.getElementById("mode-choice");
+  var modeGuided = document.getElementById("mode-guided");
+  var modeFree = document.getElementById("mode-free");
+  var redoBtn = document.querySelector("[data-redo-guided]");
+  var textarea = document.getElementById("idea");
+
+  var quizForm = document.getElementById("capo-form");
+  var steps = Array.from(quizForm.querySelectorAll(".quiz-step"));
+  var stepCurrentLabel = document.querySelector("[data-step-current]");
+  var progressFill = document.querySelector("[data-progress-fill]");
+  var nextBtn = quizForm.querySelector("[data-nav-next]");
+  var backBtn = quizForm.querySelector("[data-nav-back]");
+  var submitBtn = quizForm.querySelector("[data-nav-submit]");
+  var current = 1;
+
+  function showChoice() {
+    modeChoice.hidden = false;
+    modeGuided.hidden = true;
+    modeFree.hidden = true;
+  }
+
+  function showGuided() {
+    modeChoice.hidden = true;
+    modeGuided.hidden = false;
+    modeFree.hidden = true;
+    modeGuided.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function showFree(prefillText, fromGuided) {
+    modeChoice.hidden = true;
+    modeGuided.hidden = true;
+    modeFree.hidden = false;
+    if (prefillText) textarea.value = prefillText;
+    redoBtn.hidden = !fromGuided;
+    modeFree.scrollIntoView({ behavior: "smooth", block: "start" });
     textarea.focus();
   }
+
+  document.querySelectorAll("[data-choose-mode]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      if (btn.dataset.chooseMode === "guided") {
+        showGuided();
+      } else {
+        textarea.value = "";
+        showFree("", false);
+      }
+    });
+  });
+
+  document.querySelectorAll("[data-back-to-choice]").forEach(function (btn) {
+    btn.addEventListener("click", showChoice);
+  });
+
+  redoBtn.addEventListener("click", function () {
+    quizForm.reset();
+    goToStep(1);
+    showGuided();
+  });
+
+  function stepValid() {
+    return !!steps[current - 1].querySelector("input:checked");
+  }
+
+  function updateProgress() {
+    stepCurrentLabel.textContent = String(current);
+    progressFill.style.width = (current / steps.length) * 100 + "%";
+  }
+
+  function refreshNav() {
+    backBtn.hidden = current === 1;
+    nextBtn.hidden = current === steps.length;
+    submitBtn.hidden = current !== steps.length;
+    var valid = stepValid();
+    nextBtn.disabled = !valid;
+    submitBtn.disabled = !valid;
+  }
+
+  function goToStep(n) {
+    steps[current - 1].hidden = true;
+    current = n;
+    steps[current - 1].hidden = false;
+    updateProgress();
+    refreshNav();
+  }
+
+  steps.forEach(function (step, i) {
+    step.hidden = i !== 0;
+    step.querySelectorAll("input").forEach(function (input) {
+      input.addEventListener("change", refreshNav);
+    });
+  });
+
+  nextBtn.addEventListener("click", function () {
+    if (stepValid() && current < steps.length) goToStep(current + 1);
+  });
+
+  backBtn.addEventListener("click", function () {
+    if (current > 1) goToStep(current - 1);
+  });
+
+  quizForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    var data = new FormData(quizForm);
+    var answers = {
+      tipo: data.get("tipo"),
+      silhouette: data.get("silhouette"),
+      costruzione: data.get("costruzione"),
+      dettaglio: data.get("dettaglio"),
+      palette: data.get("palette")
+    };
+    var frase =
+      answers.tipo + ", con una silhouette " + answers.silhouette +
+      ", pensato con una costruzione " + answers.costruzione + ". " +
+      "Il dettaglio che lo rende riconoscibile: " + answers.dettaglio + ". " +
+      "Colori: " + answers.palette + ".";
+
+    showFree(frase, true);
+  });
+
+  updateProgress();
+  refreshNav();
 })();
 </script>
 </body>

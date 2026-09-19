@@ -57,6 +57,46 @@
     }, 2600);
   }
 
+  var CHALLENGE_TIPI = [
+    "un accessorio rapido, pensato per essere un primo regalo fatto a mano",
+    "un capo pensato per la vita di tutti i giorni, non per un'occasione speciale",
+    "un progetto piccolo, ma con una tecnica che non hai mai provato prima",
+    "qualcosa pensato per una serata o un'occasione precisa",
+    "un oggetto per la casa, non per il corpo — un capo che non si indossa"
+  ];
+
+  var CHALLENGE_LIVELLI = [
+    "pensato per chi muove i primi passi",
+    "di livello intermedio",
+    "pensato per chi vuole sperimentare qualcosa di più difficile del solito"
+  ];
+
+  var CHALLENGE_ELEMENTI = [
+    "una silhouette che di solito non useresti",
+    "una costruzione pensata per non avere cuciture",
+    "un dettaglio a contrasto di colore, ben visibile",
+    "una texture a rilievo, non solo punto liscio",
+    "un aumento o una diminuzione trasformati in dettaglio decorativo, non solo in tecnica"
+  ];
+
+  var CHALLENGE_MOOD = [
+    "ispirato a un ricordo d'infanzia",
+    "ispirato ai colori di questa stagione",
+    "pensato per reinventare un capo che indossi già spesso",
+    "senza nessuna ispirazione precisa — lascia decidere alle mani, non alla testa"
+  ];
+
+  function pickRandom(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function generateChallenge() {
+    return (
+      "Prova a progettare " + pickRandom(CHALLENGE_TIPI) + ", " + pickRandom(CHALLENGE_LIVELLI) +
+      ". Presta particolare attenzione a " + pickRandom(CHALLENGE_ELEMENTI) + ", " + pickRandom(CHALLENGE_MOOD) + "."
+    );
+  }
+
   var CONFETTI_COLORS = [
     "var(--color-raspberry)",
     "var(--color-orange)",
@@ -384,15 +424,15 @@
     },
 
     giorno: function () {
-      var html = panelHead("Il Punto del Giorno", "var(--color-olive)");
+      var html = panelHead("Cosa creare oggi?", "var(--color-olive)");
       var doneToday = state.dailyDone === todayKey();
-      html += '<p class="panel-intro">Un piccolo gesto al giorno, per restare in allenamento.</p>';
-      html += '<div class="stage-item"><span class="stage-num">🧶</span><div class="stage-body"><h4>Oggi: il nodo scorsoio</h4><p>Fanne uno e commenta “fatto” sotto il post di oggi su Instagram.</p></div></div>';
+      html += '<p class="panel-intro">Non è un generatore di "fai una sciarpa". È un piccolo spunto di design: un punto di partenza — una forma, una costruzione, un dettaglio da esplorare — non un pattern già pronto.</p>';
+      html += '<p class="stage-note" id="challenge-text">' + (doneToday ? "Hai già generato la tua sfida per oggi — torna domani per una nuova." : "Premi il bottone e scopri la tua sfida di oggi.") + "</p>";
       html +=
         '<button class="btn btn-primary" id="daily-btn" ' +
         (doneToday ? "disabled" : "") +
         ">" +
-        (doneToday ? "Fatto per oggi" : "Segna come fatto (+10)") +
+        (doneToday ? "Fatto per oggi" : "Genera una sfida (+10)") +
         "</button>";
       return html;
     },
@@ -490,10 +530,11 @@
       if (dailyBtn) {
         dailyBtn.addEventListener("click", async function () {
           dailyBtn.disabled = true;
+          var challengeEl = document.getElementById("challenge-text");
+          if (challengeEl) challengeEl.textContent = generateChallenge();
           try {
             await apiAction("daily-task", {});
-            openPanel(renderers.giorno());
-            bindPanelEvents("giorno");
+            dailyBtn.textContent = "Fatto per oggi";
           } catch (err) {
             showToast(err.message);
             dailyBtn.disabled = false;

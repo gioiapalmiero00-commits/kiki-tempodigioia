@@ -12,8 +12,9 @@ const MAX_AUTH_AGE_SECONDS = 24 * 60 * 60; // 24 ore
 
 function verifyTelegramInitData(initData, botToken) {
   if (!initData || !botToken) return null;
+  botToken = botToken.trim();
 
-  const params = new URLSearchParams(initData);
+  const params = new URLSearchParams(initData.trim());
   const hash = params.get("hash");
   if (!hash) return null;
   params.delete("hash");

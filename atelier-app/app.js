@@ -57,6 +57,34 @@
     }, 2600);
   }
 
+  var CONFETTI_COLORS = [
+    "var(--color-raspberry)",
+    "var(--color-orange)",
+    "var(--color-blue)",
+    "var(--color-olive)"
+  ];
+
+  function showConfetti() {
+    var container = document.createElement("div");
+    container.className = "confetti-burst";
+    var pieceCount = 40;
+    for (var i = 0; i < pieceCount; i++) {
+      var piece = document.createElement("span");
+      piece.className = "confetti-piece";
+      piece.style.left = Math.random() * 100 + "%";
+      piece.style.background = CONFETTI_COLORS[i % CONFETTI_COLORS.length];
+      piece.style.animationDelay = Math.random() * 0.3 + "s";
+      piece.style.animationDuration = 1.6 + Math.random() * 1.2 + "s";
+      piece.style.setProperty("--drift", (Math.random() * 120 - 60) + "px");
+      piece.style.setProperty("--spin", (Math.random() * 720 - 360) + "deg");
+      container.appendChild(piece);
+    }
+    document.body.appendChild(container);
+    setTimeout(function () {
+      container.remove();
+    }, 3000);
+  }
+
   async function apiGet() {
     var res = await fetch("/api/atelier-state", {
       headers: { "X-Telegram-Init-Data": initData }
@@ -293,6 +321,7 @@
         btn.disabled = true;
         try {
           await apiAction("complete-stage", { stageIndex: i });
+          showConfetti();
           openPanel(renderStage(i));
         } catch (err) {
           showToast(err.message);

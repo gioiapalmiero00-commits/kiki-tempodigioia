@@ -9,10 +9,7 @@ exports.handler = async (event) => {
 
   const initData = event.headers["x-telegram-init-data"];
   const botToken = process.env.TELEGRAM_BOT_TOKEN;
-  console.log("[debug atelier-state] initData length:", initData ? initData.length : 0);
-  console.log("[debug atelier-state] botToken length:", botToken ? botToken.length : 0);
   const telegramUser = verifyTelegramInitData(initData, botToken);
-  console.log("[debug atelier-state] telegramUser:", telegramUser ? "OK" : "null");
   if (!telegramUser) {
     return { statusCode: 401, body: JSON.stringify({ error: "Identita' Telegram non valida." }) };
   }

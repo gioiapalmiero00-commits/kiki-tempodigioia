@@ -27,12 +27,6 @@ function verifyTelegramInitData(initData, botToken) {
   const secretKey = crypto.createHmac("sha256", "WebAppData").update(botToken).digest();
   const computedHash = crypto.createHmac("sha256", secretKey).update(dataCheckString).digest("hex");
 
-  console.log("[debug verify] botToken trimmed length:", botToken.length);
-  console.log("[debug verify] botToken preview:", botToken.slice(0, 6) + "..." + botToken.slice(-4));
-  console.log("[debug verify] initData keys:", [...params.keys()]);
-  console.log("[debug verify] computedHash:", computedHash);
-  console.log("[debug verify] givenHash:", hash);
-
   if (computedHash !== hash) return null;
 
   const authDate = Number(params.get("auth_date") || 0);

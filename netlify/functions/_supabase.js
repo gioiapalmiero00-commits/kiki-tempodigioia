@@ -6,8 +6,6 @@ function getSupabase() {
   if (!client) {
     const url = process.env.SUPABASE_URL;
     const key = process.env.SUPABASE_SERVICE_KEY;
-    console.log("[debug supabase] SUPABASE_URL value:", JSON.stringify(url));
-    console.log("[debug supabase] SUPABASE_SERVICE_KEY length:", key ? key.length : 0);
     if (!url || !key) {
       throw new Error("SUPABASE_URL o SUPABASE_SERVICE_KEY mancanti nelle variabili d'ambiente Netlify.");
     }

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>L'Atelier di Kiki</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..900&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/css/style.css" />
+<link rel="stylesheet" href="/assets/css/minigioco.css" />
+<link rel="stylesheet" href="/atelier-app/atelier-app.css" />
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+
+<div id="app-loading" class="app-loading">
+  <span class="app-loading-spinner" aria-hidden="true"></span>
+  <p>Apro il tuo Atelier...</p>
+</div>
+
+<div id="app-error" class="app-error" hidden>
+  <p>Non riesco ad aprire l'Atelier da qui. Aprilo dal pulsante del bot Telegram di Kiki.</p>
+</div>
+
+<main id="app-root" class="wrap app-root" hidden>
+  <div class="section-head center">
+    <span class="eyebrow">Il tuo filo</span>
+    <h1 style="font-size:clamp(1.6rem,5vw,2.2rem)">Un gomitolo, cinque tappe, una Borsa Girasole</h1>
+  </div>
+
+  <div class="yarn-label">
+    <div class="yarn-stats">
+      <div class="stat"><b id="stat-gomitoli">0</b><span>Gomitoli</span></div>
+      <div class="stat"><b id="stat-badge">0</b><span>Badge</span></div>
+      <div class="stat"><b id="stat-mastery">0/5</b><span>Maestria</span></div>
+    </div>
+    <div class="rank-name" id="rank-name">Apprendista del Filo</div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="rank-hint" id="rank-hint">Comincia dalla Parte 1 qui sotto</div>
+    <p class="rank-purpose">A cosa servono i gomitoli: salendo di rango apri la <b>Bottega delle Creazioni</b>, con contenuti esclusivi dell'Atelier.</p>
+  </div>
+
+  <div class="journey-wrap">
+    <div class="thread-wrap">
+      <svg class="thread-svg" viewBox="0 0 320 820" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <defs>
+          <linearGradient id="threadGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" style="stop-color:var(--color-raspberry)" />
+            <stop offset="100%" style="stop-color:var(--color-orange)" />
+          </linearGradient>
+        </defs>
+        <path class="thread-base" d="M160,80 C160,140 90,140 90,190 C90,260 230,260 230,330 C230,400 90,400 90,470 C90,540 230,540 230,610 C230,680 90,680 90,750 C90,780 110,780 110,790" />
+        <path id="seg-0" class="thread-seg" d="M160,80 C160,140 90,140 90,190" />
+        <path id="seg-1" class="thread-seg" d="M90,190 C90,260 230,260 230,330" />
+        <path id="seg-2" class="thread-seg" d="M230,330 C230,400 90,400 90,470" />
+        <path id="seg-3" class="thread-seg" d="M90,470 C90,540 230,540 230,610" />
+        <path id="seg-4" class="thread-seg" d="M230,610 C230,680 90,680 90,750" />
+        <path class="thread-tail" d="M110,790 q6,9 2,17" />
+        <path class="thread-tail" d="M110,790 q-8,7 -4,19" />
+        <path class="thread-tail" d="M110,790 q10,4 8,15" />
+        <g>
+          <circle cx="160" cy="50" r="28" fill="var(--color-raspberry)" />
+          <path d="M136,38 Q160,60 184,38" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" fill="none" />
+          <path d="M134,52 Q160,30 186,52" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" fill="none" />
+          <path d="M138,66 Q160,44 182,66" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" fill="none" />
+        </g>
+      </svg>
+
+      <button class="thread-stop stop-left" data-stage="0" style="top:23.2%">
+        <span class="stop-marker" style="--accent:var(--color-raspberry)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="7.5" /><circle cx="12" cy="12" r="3" /></svg></span>
+        <span class="stop-text"><span class="badge badge-new">Parte 1</span><b>Il fondo rotondo</b><small>Borsa Girasole · la base</small></span>
+      </button>
+      <button class="thread-stop stop-right" data-stage="1" style="top:40.2%">
+        <span class="stop-marker" style="--accent:var(--color-orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 8h14M5 12h14M5 16h14" /></svg></span>
+        <span class="stop-text"><span class="badge badge-locked">Bloccata</span><b>Il corpo della borsa</b><small>Borsa Girasole · il corpo</small></span>
+      </button>
+      <button class="thread-stop stop-left" data-stage="2" style="top:57.3%">
+        <span class="stop-marker" style="--accent:var(--color-blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10V7a5 5 0 0 1 10 0v3" /><rect x="5" y="10" width="14" height="9" rx="1.5" /></svg></span>
+        <span class="stop-text"><span class="badge badge-locked">Bloccata</span><b>I manici</b><small>Borsa Girasole · i manici</small></span>
+      </button>
+      <button class="thread-stop stop-right" data-stage="3" style="top:74.4%">
+        <span class="stop-marker" style="--accent:var(--color-olive)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 12h12" /><circle cx="12" cy="12" r="2.3" /></svg></span>
+        <span class="stop-text"><span class="badge badge-locked">Bloccata</span><b>La chiusura</b><small>Borsa Girasole · la rifinitura</small></span>
+      </button>
+      <button class="thread-stop stop-left" data-stage="4" style="top:91.5%">
+        <span class="stop-marker" style="--accent:var(--color-raspberry)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="2.3" /><path d="M12 4.5v3M12 16.5v3M4.5 12h3M16.5 12h3M7 7l2 2M15 15l2 2M7 17l2-2M15 9l2-2" /></svg></span>
+        <span class="stop-text"><span class="badge badge-locked">Bloccata</span><b>Il girasole applicato</b><small>Borsa Girasole · il tocco finale</small></span>
+      </button>
+    </div>
+
+    <button class="orbit-node" data-room="capanna" style="top:6%;right:0">
+      <span class="orbit-marker" style="--accent:var(--color-orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7" /><path d="M6 10v9h12v-9" /></svg></span>
+      <span class="orbit-label">La Capanna dei Sogni</span>
+      <span class="badge badge-new">Nuovo</span>
+    </button>
+    <button class="orbit-node" data-room="sfida" style="top:27%;left:0">
+      <span class="orbit-marker" style="--accent:var(--color-blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 15.4 7.2 17.9l.9-5.4-3.9-3.8 5.4-.8z" /></svg></span>
+      <span class="orbit-label">La Sfida del Prossimo Pattern</span>
+      <span class="badge badge-new">Vota ora</span>
+    </button>
+    <button class="orbit-node" data-room="giorno" style="top:48%;right:0">
+      <span class="orbit-marker" style="--accent:var(--color-olive)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8" /><path d="M8.5 12.5l2.2 2.2 4.8-5" /></svg></span>
+      <span class="orbit-label">Il Punto del Giorno</span>
+      <span class="badge badge-new">Oggi</span>
+    </button>
+    <button class="orbit-node" data-room="ruota" style="top:69%;left:0">
+      <span class="orbit-marker" style="--accent:var(--color-raspberry)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="7.5" /><path d="M12 6v12M6 12h12M8 8l8 8M16 8l-8 8" /></svg></span>
+      <span class="orbit-label">La Ruota dei Gomitoli</span>
+      <span class="badge badge-new">Gira</span>
+    </button>
+    <button class="orbit-node is-locked" data-room="bottega" style="top:90%;right:0">
+      <span class="orbit-marker" style="--accent:var(--color-blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="11" width="13" height="8" rx="2" /><path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3" /></svg></span>
+      <span class="orbit-label">La Bottega delle Creazioni</span>
+      <span class="badge badge-locked">Bloccata</span>
+    </button>
+  </div>
+
+  <p class="orbit-row-label">Intorno al filo</p>
+  <div class="orbit-mobile-row">
+    <button class="orbit-node" data-room="capanna">
+      <span class="orbit-marker" style="--accent:var(--color-orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7" /><path d="M6 10v9h12v-9" /></svg></span>
+      <span class="orbit-label">Capanna dei Sogni</span>
+      <span class="badge badge-new">Nuovo</span>
+    </button>
+    <button class="orbit-node" data-room="sfida">
+      <span class="orbit-marker" style="--accent:var(--color-blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 15.4 7.2 17.9l.9-5.4-3.9-3.8 5.4-.8z" /></svg></span>
+      <span class="orbit-label">Sfida del Pattern</span>
+      <span class="badge badge-new">Vota ora</span>
+    </button>
+    <button class="orbit-node" data-room="giorno">
+      <span class="orbit-marker" style="--accent:var(--color-olive)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8" /><path d="M8.5 12.5l2.2 2.2 4.8-5" /></svg></span>
+      <span class="orbit-label">Punto del Giorno</span>
+      <span class="badge badge-new">Oggi</span>
+    </button>
+    <button class="orbit-node" data-room="ruota">
+      <span class="orbit-marker" style="--accent:var(--color-raspberry)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="7.5" /><path d="M12 6v12M6 12h12M8 8l8 8M16 8l-8 8" /></svg></span>
+      <span class="orbit-label">Ruota dei Gomitoli</span>
+      <span class="badge badge-new">Gira</span>
+    </button>
+    <button class="orbit-node is-locked" data-room="bottega">
+      <span class="orbit-marker" style="--accent:var(--color-blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="11" width="13" height="8" rx="2" /><path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3" /></svg></span>
+      <span class="orbit-label">Bottega Creazioni</span>
+      <span class="badge badge-locked">Bloccata</span>
+    </button>
+  </div>
+</main>
+
+<div class="game-overlay" id="game-overlay" aria-hidden="true">
+  <div class="game-panel" id="game-panel"></div>
+</div>
+
+<script src="/atelier-app/app.js"></script>
+</body>
+</html>

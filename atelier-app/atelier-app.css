@@ -1,0 +1,75 @@
+/* Stili specifici della Mini App Telegram: riusa i token di style.css
+   e i componenti di minigioco.css, qui solo l'occorrente per l'avvio. */
+
+html, body {
+  background: var(--color-cream);
+  margin: 0;
+}
+
+.app-root {
+  padding-top: max(24px, env(safe-area-inset-top));
+  padding-bottom: 48px;
+}
+
+.app-loading,
+.app-error {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  padding: 24px;
+  font-family: var(--font-body);
+  color: var(--color-ink);
+}
+
+.app-loading[hidden],
+.app-error[hidden],
+.app-root[hidden] {
+  display: none;
+}
+
+.app-loading-spinner {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 3px solid rgba(28, 20, 15, 0.15);
+  border-top-color: var(--color-raspberry);
+  animation: app-spin 0.8s linear infinite;
+}
+
+@keyframes app-spin {
+  to { transform: rotate(360deg); }
+}
+
+.app-toast {
+  position: fixed;
+  left: 50%;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  transform: translate(-50%, 12px);
+  background: var(--color-ink);
+  color: var(--color-cream-light);
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 200;
+}
+
+.app-toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.video-embed {
+  width: 100%;
+  border-radius: var(--radius-sm);
+  margin-top: 10px;
+  background: #000;
+  display: block;
+}

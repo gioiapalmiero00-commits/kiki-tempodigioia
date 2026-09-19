@@ -1,0 +1,9 @@
+{
+  "name": "kiki-tempodigioia",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Sito statico Kiki, Tempo di Gioia + backend Netlify Functions per l'Atelier (Telegram Mini App)",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
+  }
+}

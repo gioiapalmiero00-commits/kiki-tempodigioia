@@ -1,0 +1,566 @@
+/* =========================================================
+   Minigioco "L'Atelier di Kiki" — estende i token di style.css
+   Nessun nuovo colore o font: solo componenti aggiuntivi.
+   ========================================================= */
+
+/* -------- Yarn label (cartellino da matassa) -------- */
+.yarn-label {
+  position: relative;
+  max-width: 300px;
+  margin: 0 auto 40px;
+  background: var(--color-cream-light);
+  border: 2px dashed rgba(28, 20, 15, 0.3);
+  border-radius: var(--radius-md);
+  padding: 20px 22px 16px;
+  transform: rotate(-1.5deg);
+  text-align: center;
+}
+
+.yarn-label::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 16px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--color-cream);
+  border: 2px solid rgba(28, 20, 15, 0.3);
+}
+
+.yarn-label .yarn-stats {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  margin-bottom: 10px;
+}
+
+.yarn-label .stat b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--color-raspberry);
+}
+
+.yarn-label .stat span {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.yarn-label .rank-name { font-weight: 700; font-size: 0.85rem; }
+.yarn-label .rank-hint { font-size: 0.75rem; opacity: 0.65; margin-top: 6px; }
+
+.rank-purpose {
+  font-size: 0.72rem;
+  opacity: 0.7;
+  margin: 10px 0 0;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(28, 20, 15, 0.2);
+  line-height: 1.4;
+}
+
+.progress-track {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(28, 20, 15, 0.08);
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-raspberry), var(--color-orange));
+  transition: width 0.5s ease;
+}
+
+/* -------- Status badges -------- */
+.badge.badge-done { background: var(--color-olive); }
+.badge.badge-new { background: var(--color-orange); }
+.badge.badge-locked { background: rgba(28, 20, 15, 0.35); }
+
+/* -------- Journey wrap: il filo al centro, i nodi in orbita nello spazio intorno -------- */
+.journey-wrap {
+  position: relative;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* -------- Thread journey (il filo che si srotola: solo le tappe di costruzione del capo) -------- */
+.thread-wrap {
+  position: relative;
+  max-width: min(360px, 74vw);
+  margin: 0 auto;
+  aspect-ratio: 320 / 820;
+}
+
+.thread-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+
+.thread-base {
+  fill: none;
+  stroke: rgba(28, 20, 15, 0.22);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 1 10;
+}
+
+.thread-seg {
+  fill: none;
+  stroke: url(#threadGradient);
+  stroke-width: 4;
+  stroke-linecap: round;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.thread-seg.is-done { opacity: 1; }
+
+.thread-tail {
+  fill: none;
+  stroke: rgba(28, 20, 15, 0.28);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.thread-stop {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  max-width: 80%;
+  transform: translateY(-50%);
+}
+
+.thread-stop.stop-left { left: calc(28.1% - 27px); }
+.thread-stop.stop-right { left: calc(71.9% - 27px); flex-direction: row-reverse; text-align: right; }
+
+.thread-stop.is-locked { cursor: default; }
+
+.stop-marker {
+  flex: none;
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+  background: var(--color-cream-light);
+  border: 3px solid var(--accent, var(--color-raspberry));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent, var(--color-raspberry));
+  transition: transform 0.15s ease;
+}
+
+.stop-marker svg { width: 24px; height: 24px; }
+
+.thread-stop:hover .stop-marker,
+.thread-stop:focus-visible .stop-marker { transform: scale(1.08); }
+
+.thread-stop:focus-visible { outline: 3px solid var(--color-raspberry); outline-offset: 4px; border-radius: 12px; }
+
+.thread-stop.is-locked .stop-marker {
+  border-style: dashed;
+  color: rgba(28, 20, 15, 0.4);
+  border-color: rgba(28, 20, 15, 0.3);
+}
+
+.stop-text b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.stop-text small {
+  display: block;
+  font-size: 0.78rem;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+.stop-text .badge { margin-bottom: 4px; }
+
+.thread-caption {
+  text-align: center;
+  font-size: 0.85rem;
+  font-style: italic;
+  opacity: 0.6;
+  margin-top: 28px;
+}
+
+@media (max-width: 480px) {
+  .stop-marker { width: 46px; height: 46px; }
+  .stop-marker svg { width: 20px; height: 20px; }
+  .stop-text b { font-size: 0.9rem; }
+  .stop-text small { font-size: 0.72rem; }
+}
+
+/* -------- Nodi in orbita: le altre funzionalità, staccate dal filo -------- */
+.orbit-node {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 96px;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: center;
+}
+
+.orbit-marker {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: var(--color-cream-light);
+  border: 3px solid var(--accent, var(--color-blue));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent, var(--color-blue));
+  transition: transform 0.15s ease;
+}
+
+.orbit-marker::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 999px;
+  border: 1.5px dashed var(--accent, var(--color-blue));
+  opacity: 0.4;
+}
+
+.orbit-marker svg { width: 20px; height: 20px; }
+
+.orbit-node:hover .orbit-marker,
+.orbit-node:focus-visible .orbit-marker { transform: scale(1.08); }
+
+.orbit-node:focus-visible { outline: 3px solid var(--color-raspberry); outline-offset: 4px; border-radius: 12px; }
+
+.orbit-node.is-locked .orbit-marker {
+  border-style: dashed;
+  color: rgba(28, 20, 15, 0.4);
+  border-color: rgba(28, 20, 15, 0.3);
+}
+
+.orbit-label {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.8rem;
+  line-height: 1.2;
+}
+
+.orbit-node .badge { font-size: 0.6rem; padding: 3px 8px; }
+
+.orbit-row-label {
+  display: none;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin: 36px 0 16px;
+}
+
+.orbit-mobile-row { display: none; }
+
+@media (max-width: 680px) {
+  .journey-wrap .orbit-node { display: none; }
+  .orbit-row-label { display: block; }
+  .orbit-mobile-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px 26px;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+  .orbit-mobile-row .orbit-node { position: static; }
+}
+
+/* -------- Overlay / panel -------- */
+.game-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 20, 15, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.game-overlay.open { opacity: 1; pointer-events: auto; }
+
+.game-panel {
+  background: var(--color-cream-light);
+  border-radius: var(--radius-lg);
+  max-width: 560px;
+  width: 100%;
+  max-height: 86vh;
+  overflow-y: auto;
+  padding: clamp(24px, 4vw, 36px);
+  transform: translateY(14px);
+  transition: transform 0.22s ease;
+}
+
+.game-overlay.open .game-panel { transform: translateY(0); }
+
+.panel-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.panel-top .flower-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: var(--color-cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.panel-top .flower-badge svg { position: static; width: 26px; height: 26px; }
+
+.panel-top h3 { margin: 0; }
+
+.panel-close {
+  margin-left: auto;
+  background: none;
+  border: 2px solid var(--color-ink);
+  color: var(--color-ink);
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  flex: none;
+}
+
+.panel-intro { opacity: 0.8; margin-bottom: 20px; }
+
+/* -------- Library stages -------- */
+.stage-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: var(--color-cream);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.stage-item.is-locked { opacity: 0.55; }
+
+.stage-num {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: var(--color-cream-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 0.9rem;
+}
+
+.stage-item.is-done .stage-num { background: var(--color-olive); color: var(--color-cream-light); }
+
+.stage-body { flex: 1; min-width: 0; }
+.stage-body h4 { margin: 0 0 4px; font-family: var(--font-display); font-size: 1.05rem; }
+.stage-body p { margin: 0; font-size: 0.9rem; opacity: 0.75; }
+
+.video-slot {
+  margin-top: 10px;
+  border: 2px dashed rgba(28, 20, 15, 0.25);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.stage-note { font-size: 0.85rem; opacity: 0.7; margin-top: 8px; }
+
+.btn-small {
+  padding: 10px 18px;
+  font-size: 0.85rem;
+  margin-top: 10px;
+  box-shadow: 0 4px 0 0 var(--color-raspberry-dark);
+}
+
+.btn-small[disabled] { box-shadow: none; }
+
+/* -------- Dream hut form -------- */
+.game-field { margin-bottom: 16px; }
+
+.game-field label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.game-field textarea {
+  width: 100%;
+  min-height: 72px;
+  resize: vertical;
+  border-radius: var(--radius-sm);
+  border: 2px solid rgba(28, 20, 15, 0.15);
+  background: #fff;
+  color: var(--color-ink);
+  padding: 12px 14px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+}
+
+.game-field textarea:focus-visible { outline: 2px solid var(--color-raspberry); }
+
+.privacy-note {
+  display: flex;
+  gap: 10px;
+  font-size: 0.82rem;
+  opacity: 0.75;
+  background: var(--color-cream);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 6px;
+}
+
+.thankyou-note {
+  background: rgba(124, 122, 34, 0.12);
+  border: 1px solid var(--color-olive);
+  color: var(--color-olive);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  font-weight: 600;
+}
+
+/* -------- Idea voting -------- */
+.idea-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--color-cream);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+
+.idea-rank {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: var(--color-raspberry);
+  width: 26px;
+  flex: none;
+}
+
+.idea-info { flex: 1; min-width: 0; }
+.idea-info b { display: block; font-size: 0.95rem; }
+.idea-info span { font-size: 0.8rem; opacity: 0.65; }
+
+.vote-btn {
+  flex: none;
+  background: #fff;
+  border: 2px solid var(--color-ink);
+  color: var(--color-ink);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.vote-btn.voted {
+  background: var(--color-raspberry);
+  border-color: var(--color-raspberry);
+  color: var(--color-cream-light);
+}
+
+.prize-note {
+  margin-top: 10px;
+  padding-top: 14px;
+  border-top: 2px dashed rgba(28, 20, 15, 0.15);
+  font-size: 0.88rem;
+  opacity: 0.75;
+}
+
+.idea-propose {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 2px dashed rgba(28, 20, 15, 0.15);
+}
+
+.idea-propose h4 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  margin: 0 0 8px;
+}
+
+/* -------- Wheel -------- */
+.wheel-wrap { text-align: center; }
+
+.wheel {
+  width: 130px;
+  height: 130px;
+  border-radius: 999px;
+  margin: 0 auto 18px;
+  background: conic-gradient(
+    var(--color-raspberry) 0 90deg,
+    var(--color-orange) 90deg 180deg,
+    var(--color-olive) 180deg 270deg,
+    var(--color-blue) 270deg 360deg
+  );
+  border: 4px solid var(--color-cream-light);
+  box-shadow: 0 0 0 2px rgba(28, 20, 15, 0.15);
+  transition: transform 2.4s cubic-bezier(0.17, 0.89, 0.32, 1.1);
+}
+
+.wheel-result {
+  margin-top: 12px;
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: var(--color-raspberry);
+  min-height: 24px;
+}
+
+.locked-panel { text-align: center; padding: 20px 0; }
+.locked-panel .flower-badge { margin: 0 auto 14px; width: 56px; height: 56px; }
+.locked-panel .flower-badge svg { width: 32px; height: 32px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wheel, .thread-stop, .orbit-node, .game-overlay, .game-panel { transition: none; }
+}
+
+@media (max-width: 640px) {
+  .game-status { margin-top: -40px; }
+}

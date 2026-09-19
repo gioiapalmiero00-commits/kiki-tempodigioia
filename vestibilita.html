@@ -1,0 +1,870 @@
+<title>Vestibilità su Misura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F3F8;
+    --surface:#FFFFFF;
+    --surface-2:#EFEAF3;
+    --text:#2B2733;
+    --text-muted:#6B6478;
+    --accent:#7A4869;
+    --accent-soft:#F0E1EA;
+    --accent-2:#A8763E;
+    --accent-2-soft:#F3E7D6;
+    --border:#E1DAE8;
+    --border-strong:#CBBFD6;
+    --shadow: 0 1px 2px rgba(43,39,51,0.04), 0 6px 20px rgba(43,39,51,0.06);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#1E1A24;
+      --surface:#28222E;
+      --surface-2:#332B3B;
+      --text:#EEE8F1;
+      --text-muted:#AA9FB6;
+      --accent:#D79FBB;
+      --accent-soft:#3E2E3A;
+      --accent-2:#E2B571;
+      --accent-2-soft:#3A3126;
+      --border:#3D3546;
+      --border-strong:#4E4459;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1E1A24;
+    --surface:#28222E;
+    --surface-2:#332B3B;
+    --text:#EEE8F1;
+    --text-muted:#AA9FB6;
+    --accent:#D79FBB;
+    --accent-soft:#3E2E3A;
+    --accent-2:#E2B571;
+    --accent-2-soft:#3A3126;
+    --border:#3D3546;
+    --border-strong:#4E4459;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Work Sans', system-ui, sans-serif;
+    margin:0;
+    padding:32px 16px 64px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px; margin:0 auto;}
+
+  header.page{margin-bottom:28px;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--accent-2);
+    margin:0 0 10px;
+    font-weight:500;
+  }
+  h1{
+    font-family:'Fraunces', Georgia, serif;
+    font-optical-sizing:auto;
+    font-weight:600;
+    font-size:clamp(28px,5vw,40px);
+    line-height:1.08;
+    margin:0 0 10px;
+    text-wrap:balance;
+    letter-spacing:-0.01em;
+  }
+  header.page p{
+    color:var(--text-muted);
+    font-size:15.5px;
+    line-height:1.55;
+    margin:0;
+    max-width:64ch;
+  }
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:22px 22px 24px;
+    box-shadow:var(--shadow);
+    margin-bottom:18px;
+  }
+  .card h2{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:600;
+    font-size:19px;
+    margin:0 0 4px;
+    display:flex;
+    align-items:baseline;
+    gap:9px;
+  }
+  .card h2 .step{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--accent);
+    background:var(--accent-soft);
+    border-radius:6px;
+    padding:2px 7px;
+    font-weight:600;
+  }
+  .card > .hint{color:var(--text-muted); font-size:13.5px; margin:0 0 16px; line-height:1.5;}
+
+  .row{display:flex; gap:10px; flex-wrap:wrap;}
+
+  .toggle-group{display:flex; gap:8px; flex-wrap:wrap;}
+  .toggle-btn{
+    border:1px solid var(--border-strong);
+    background:var(--surface);
+    color:var(--text);
+    padding:9px 16px;
+    border-radius:10px;
+    font-family:'Work Sans', sans-serif;
+    font-size:14px;
+    font-weight:500;
+    cursor:pointer;
+    transition:background .15s, color .15s, border-color .15s;
+  }
+  .toggle-btn:hover{border-color:var(--accent);}
+  .toggle-btn.active{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
+  }
+
+  select.field, input.field{
+    border:1px solid var(--border-strong);
+    background:var(--surface);
+    color:var(--text);
+    padding:9px 12px;
+    border-radius:10px;
+    font-family:'Work Sans', sans-serif;
+    font-size:14px;
+    width:100%;
+  }
+  label.field-label{
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--text-muted);
+    display:block;
+    margin:0 0 6px;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+  }
+  .field-col{flex:1 1 200px; min-width:160px;}
+
+  .checks{display:flex; gap:18px; flex-wrap:wrap; margin-top:14px;}
+  .check{display:flex; align-items:center; gap:7px; font-size:13.5px; color:var(--text-muted);}
+  .check input{accent-color:var(--accent); width:16px; height:16px;}
+
+  .fit-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(180px,1fr));
+    gap:10px;
+  }
+  .fit-card{
+    border:1.5px solid var(--border);
+    border-radius:12px;
+    padding:13px 14px;
+    cursor:pointer;
+    background:var(--surface);
+    transition:border-color .15s, background .15s;
+    text-align:left;
+  }
+  .fit-card:hover{border-color:var(--border-strong);}
+  .fit-card.active{
+    border-color:var(--accent);
+    background:var(--accent-soft);
+  }
+  .fit-card .name{font-weight:600; font-size:14.5px; margin:0 0 3px;}
+  .fit-card .range{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--accent-2);
+    margin:0 0 6px;
+    font-weight:500;
+  }
+  .fit-card .desc{font-size:12.5px; color:var(--text-muted); line-height:1.4; margin:0;}
+  .fit-card.custom-card{display:flex; flex-direction:column; gap:8px;}
+  .fit-card.custom-card .slider-row{display:flex; align-items:center; gap:8px;}
+  .fit-card.custom-card input[type=range]{flex:1; accent-color:var(--accent);}
+  .fit-card.custom-card .custom-val{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    font-size:13.5px;
+    min-width:50px;
+    text-align:right;
+  }
+
+  details.collapse{margin-top:4px;}
+  details.collapse > summary{
+    cursor:pointer;
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--accent);
+    list-style:none;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 0;
+  }
+  details.collapse > summary::-webkit-details-marker{display:none;}
+  details.collapse > summary::before{
+    content:"›";
+    display:inline-block;
+    transition:transform .15s;
+    font-size:15px;
+  }
+  details.collapse[open] > summary::before{transform:rotate(90deg);}
+  .collapse-body{padding-top:12px;}
+
+  table.mini-edit{width:100%; border-collapse:collapse; font-size:13px;}
+  table.mini-edit th, table.mini-edit td{
+    padding:6px 5px;
+    text-align:center;
+    border-bottom:1px solid var(--border);
+  }
+  table.mini-edit th{color:var(--text-muted); font-weight:600; font-size:11.5px; text-transform:uppercase; letter-spacing:.03em;}
+  table.mini-edit th:first-child, table.mini-edit td:first-child{text-align:left; width:110px;}
+  table.mini-edit input{
+    width:56px;
+    text-align:center;
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:4px 3px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    background:var(--bg);
+    color:var(--text);
+  }
+  .reset-btn{
+    margin-top:12px;
+    font-size:12.5px;
+    color:var(--text-muted);
+    background:none;
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:6px 11px;
+    cursor:pointer;
+  }
+  .reset-btn:hover{border-color:var(--accent); color:var(--accent);}
+
+  .gauge-note{font-size:12.5px; color:var(--text-muted); margin-top:10px; line-height:1.5;}
+
+  .finder-row{display:flex; gap:10px; align-items:end; flex-wrap:wrap;}
+  .finder-result{
+    margin-top:12px;
+    font-size:14px;
+    padding:10px 13px;
+    border-radius:10px;
+    background:var(--accent-2-soft);
+    color:var(--text);
+    display:none;
+  }
+  .finder-result.show{display:block;}
+  .finder-result b{color:var(--accent-2); font-family:'IBM Plex Mono', monospace;}
+
+  .results-head{display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:10px; margin-bottom:14px;}
+  .results-head h2{margin:0;}
+  .unit-toggle{display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-muted);}
+  .switch{
+    position:relative; width:38px; height:22px; border-radius:12px; background:var(--border-strong);
+    cursor:pointer; flex-shrink:0;
+  }
+  .switch .knob{
+    position:absolute; top:2px; left:2px; width:18px; height:18px; border-radius:50%;
+    background:var(--surface); transition:left .15s;
+  }
+  .switch.on{background:var(--accent);}
+  .switch.on .knob{left:18px;}
+
+  .summary-bar{
+    display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;
+  }
+  .pill{
+    background:var(--surface-2);
+    border-radius:999px;
+    padding:6px 13px;
+    font-size:12.5px;
+    color:var(--text-muted);
+    display:flex; align-items:center; gap:6px;
+  }
+  .pill b{color:var(--text); font-weight:600;}
+
+  .table-scroll{overflow-x:auto; border-radius:12px; border:1px solid var(--border);}
+  table.results{
+    width:100%;
+    border-collapse:collapse;
+    font-family:'Work Sans', sans-serif;
+    min-width:640px;
+  }
+  table.results thead th{
+    background:var(--surface-2);
+    font-size:12.5px;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    color:var(--text-muted);
+    font-weight:600;
+    padding:11px 8px;
+    text-align:center;
+    border-bottom:1px solid var(--border);
+    position:sticky; top:0;
+  }
+  table.results thead th:first-child{
+    text-align:left; position:sticky; left:0; z-index:2; background:var(--surface-2);
+  }
+  table.results tbody th.group-row{
+    text-align:left;
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    font-weight:600;
+    padding:8px 10px;
+    position:sticky; left:0;
+  }
+  table.results tbody td, table.results tbody td.rowlabel{
+    padding:10px 8px;
+    text-align:center;
+    border-bottom:1px solid var(--border);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13.5px;
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+  }
+  table.results tbody td.rowlabel{
+    text-align:left;
+    font-family:'Work Sans', sans-serif;
+    font-size:13px;
+    color:var(--text);
+    font-weight:500;
+    position:sticky; left:0; background:var(--surface);
+    white-space:normal;
+  }
+  table.results tbody tr:nth-child(even) td:not(.rowlabel){background:var(--bg);}
+  table.results tbody tr:nth-child(even) td.rowlabel{background:var(--surface-2);}
+  table.results tbody td .in{display:block; color:var(--text-muted); font-size:11px; font-weight:400;}
+  .in-hidden .in{display:none;}
+  table.results tbody td.ref{color:var(--text-muted); font-style:italic;}
+  table.results tbody td.ref .cyc-range{display:block; font-size:10.5px; color:var(--text-muted); font-family:'Work Sans',sans-serif; font-style:normal;}
+  table.results td.highlight-col, table.results th.highlight-col{background:var(--accent-2-soft) !important;}
+
+  footer.note{
+    font-size:12.5px;
+    color:var(--text-muted);
+    line-height:1.6;
+    margin-top:22px;
+    padding-top:16px;
+    border-top:1px solid var(--border);
+  }
+  footer.note a{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft);}
+
+  @media (max-width:520px){
+    .card{padding:18px 16px 20px;}
+    .field-col{min-width:130px;}
+  }
+</style>
+
+<div class="wrap">
+  <header class="page">
+    <p class="eyebrow">Ferri &amp; Uncinetto — Tabella taglie</p>
+    <h1>Vestibilità su Misura</h1>
+    <p>Scegli come vuoi che cada il capo — aderente, classico, comodo o oversize — e ottieni le misure finite per taglia, da XS a XXL, basate sulle misure corporee standard del <strong>Craft Yarn Council</strong> (lo standard di riferimento usato dalla maggior parte delle designer di maglia e uncinetto).</p>
+  </header>
+
+  <!-- STEP 1: lavorazione + capo -->
+  <div class="card">
+    <h2><span class="step">1</span> Lavorazione e tipo di capo</h2>
+    <p class="hint">Determina quali misure ti servono davvero (maniche, fianchi, vita sagomata) e la lunghezza di base del capo.</p>
+    <div class="row" style="margin-bottom:16px;">
+      <div class="toggle-group" id="craftToggle">
+        <button type="button" class="toggle-btn active" data-craft="ferri">Ai ferri</button>
+        <button type="button" class="toggle-btn" data-craft="uncinetto">All'uncinetto</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field-col">
+        <label class="field-label" for="garmentType">Tipo di capo</label>
+        <select class="field" id="garmentType">
+          <option value="pullover">Maglione / Pullover</option>
+          <option value="cardigan">Cardigan</option>
+          <option value="gilet">Gilet</option>
+          <option value="abito">Abito / Tunica</option>
+          <option value="top">Top / Canotta</option>
+        </select>
+      </div>
+      <div class="field-col">
+        <label class="field-label" for="lengthOption">Dove finisce il capo</label>
+        <select class="field" id="lengthOption">
+          <option value="vita">Alla vita</option>
+          <option value="fianchi">Ai fianchi (lunghezza standard)</option>
+          <option value="tunica">Tunica / lunga</option>
+        </select>
+      </div>
+    </div>
+    <div class="checks">
+      <label class="check"><input type="checkbox" id="hasSleeves"> Con maniche</label>
+      <label class="check"><input type="checkbox" id="showHip"> Misura anche i fianchi</label>
+      <label class="check"><input type="checkbox" id="showWaist"> Vita sagomata (misura anche la vita)</label>
+    </div>
+    <p class="gauge-note" id="crochetNote" style="display:none;">Nota: l'uncinetto produce in genere un tessuto meno estensibile dei ferri. Molte designer per questo scelgono un agio leggermente più abbondante — non esiste però una correzione numerica standardizzata: se vuoi tenerne conto, usa la vestibilità "Personalizzata" qui sotto.</p>
+  </div>
+
+  <!-- STEP 2: vestibilità -->
+  <div class="card">
+    <h2><span class="step">2</span> Che vestibilità vuoi?</h2>
+    <p class="hint">L'agio è la differenza tra la circonferenza del capo finito e la tua misura corporea reale. Le categorie e i range sono quelli del <em>Bust/Chest Fit and Ease Chart</em> del Craft Yarn Council.</p>
+    <div class="fit-grid" id="fitGrid"></div>
+    <p class="gauge-note">Il Craft Yarn Council definisce questi range specificamente per il petto/busto. Per semplicità qui lo stesso agio viene applicato anche a vita e fianchi (se li mostri): è un'estensione ragionevole ma non una regola ufficiale, quindi modificala pure se il tuo modello richiede altro.</p>
+  </div>
+
+  <!-- STEP 3: misure di base -->
+  <div class="card">
+    <h2><span class="step">3</span> Misure corporee di base</h2>
+    <p class="hint">Valori standard Craft Yarn Council (punto medio dell'intervallo ufficiale per ciascuna taglia) — modificali se le tue misure reali sono diverse.</p>
+    <details class="collapse">
+      <summary>Personalizza le misure di base</summary>
+      <div class="collapse-body">
+        <table class="mini-edit" id="baseEditTable"></table>
+        <button class="reset-btn" id="resetBase">Ripristina valori standard CYC</button>
+      </div>
+    </details>
+
+    <details class="collapse">
+      <summary>Quale taglia corrisponde al mio corpo?</summary>
+      <div class="collapse-body">
+        <div class="finder-row">
+          <div class="field-col" style="max-width:220px;">
+            <label class="field-label" for="finderInput">Il tuo giro busto (cm)</label>
+            <input class="field" type="number" id="finderInput" placeholder="es. 96" min="50" max="180">
+          </div>
+        </div>
+        <div class="finder-result" id="finderResult"></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- STEP 4: campione -->
+  <div class="card">
+    <h2><span class="step">4</span> Campione <span style="font-weight:400; color:var(--text-muted); font-size:13px;">(opzionale)</span></h2>
+    <p class="hint">Se lo indichi, calcolo anche il numero di maglie da avviare e i giri, taglia per taglia.</p>
+    <div class="row">
+      <div class="field-col">
+        <label class="field-label" for="gaugeStitches">Maglie ogni 10 cm</label>
+        <input class="field" type="number" id="gaugeStitches" placeholder="es. 20" min="0" step="0.5">
+      </div>
+      <div class="field-col">
+        <label class="field-label" for="gaugeRows">Giri ogni 10 cm</label>
+        <input class="field" type="number" id="gaugeRows" placeholder="es. 28" min="0" step="0.5">
+      </div>
+    </div>
+    <p class="gauge-note">Il conteggio maglie del corpo è arrotondato al numero pari più vicino; ricontrolla se il tuo punto richiede un multiplo particolare. Le maglie manica sono calcolate sul giro bicipite corporeo (senza agio aggiunto): decidi tu quanto ampliarlo in base al modello.</p>
+  </div>
+
+  <!-- RISULTATI -->
+  <div class="card">
+    <div class="results-head">
+      <h2 style="margin:0;">Tabella misure per taglia</h2>
+      <div class="unit-toggle">
+        <span>Mostra anche pollici</span>
+        <div class="switch" id="inSwitch"><div class="knob"></div></div>
+      </div>
+    </div>
+    <div class="summary-bar" id="summaryBar"></div>
+    <div class="table-scroll">
+      <table class="results" id="resultsTable"></table>
+    </div>
+  </div>
+
+  <footer class="note">
+    Misure corporee di base: <a href="https://www.craftyarncouncil.com/standards/woman-size" target="_blank" rel="noopener">Craft Yarn Council — Woman Size Charts</a>. Range di agio: <a href="https://www.craftyarncouncil.com/standards/body-sizing" target="_blank" rel="noopener">Craft Yarn Council — Bust/Chest Fit and Ease Chart</a>. La taglia "XXL" qui corrisponde alla taglia "2X" del CYC. Questi sono valori medi di riferimento, non le tue misure reali: verifica sempre maglie e giri su un campione lavorato prima di iniziare il capo. I pollici sono un arrotondamento di riferimento.
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var SIZES = ["XS","S","M","L","XL","XXL"];
+
+  // Source: Craft Yarn Council, Woman Size Charts (craftyarncouncil.com/standards/woman-size)
+  // Ranges as published (cm); "mid" is the midpoint used for calculations, editable by the user.
+  var CYC = {
+    bust:        {lo:[71,81,91.5,101.5,111.5,122], hi:[76,86,96.5,106.5,117,127]},
+    waist:       {lo:[58.5,63.5,71,81.5,91.5,101.5], hi:[61,67.5,76,86.5,96.5,106.5]},
+    hip:         {lo:[83.5,89,96.5,106.5,116.5,132], hi:[86,91.5,101.5,111.5,122,134.5]},
+    armholeDepth:{lo:[15.5,16.5,17.5,19,20.5,21.5], hi:[16.5,17.5,19,20.5,21.5,23]},
+    crossBack:   {lo:[35.5,37,39.5,42,44.5,45.5], hi:[37,38,40.5,43,44.5,45.5]}
+  };
+  function midOf(range){ var out=[]; for(var i=0;i<6;i++) out.push(Math.round((range.lo[i]+range.hi[i])/2*10)/10); return out; }
+
+  var DEFAULT_BASE = {
+    bust: midOf(CYC.bust),
+    waist: midOf(CYC.waist),
+    hip: midOf(CYC.hip),
+    backWaistLength: [42, 43, 43.5, 44.5, 45, 45.5],
+    crossBack: midOf(CYC.crossBack),
+    sleeveLength: [42, 43, 43, 44.5, 44.5, 45.5],
+    upperArm: [25, 26, 28, 30.5, 34.5, 39.5],
+    armholeDepth: midOf(CYC.armholeDepth)
+  };
+
+  var FITS = [
+    {key:"veryclose", name:"Molto aderente", ease:-7.5, range:"da −10 a −5 cm", desc:"Agio negativo: più stretta della misura reale (CYC: very close fitting)."},
+    {key:"close",     name:"Aderente",       ease:0,    range:"0 cm — agio zero", desc:"A pelle, pari alla circonferenza corporea reale (CYC: close fitting)."},
+    {key:"classic",   name:"Classica",       ease:7.5,  range:"da +5 a +10 cm", desc:"Comoda, leggermente più ampia del corpo (CYC: classic fit)."},
+    {key:"loose",     name:"Comoda",         ease:12.5, range:"da +10 a +15 cm", desc:"Morbida e rilassata, verso il leggero oversize (CYC: loose fit)."},
+    {key:"oversized", name:"Oversize",       ease:20,   range:"+15 cm e oltre", desc:"Molto ampia, capo avvolgente (CYC: oversized, agio generoso)."},
+    {key:"custom",    name:"Personalizzata", ease:null, range:"",               desc:""}
+  ];
+
+  var state = {
+    craft:"ferri",
+    garment:"pullover",
+    hasSleeves:true,
+    showHip:false,
+    showWaist:false,
+    lengthOption:"fianchi",
+    fit:"classic",
+    customEase:10,
+    base: JSON.parse(JSON.stringify(DEFAULT_BASE)),
+    showInches:false,
+    gaugeStitches:null,
+    gaugeRows:null
+  };
+
+  var GARMENTS = {
+    pullover:{hasSleeves:true,  showHip:false, showWaist:false, lengthOption:"fianchi"},
+    cardigan:{hasSleeves:true,  showHip:true,  showWaist:false, lengthOption:"fianchi"},
+    gilet:   {hasSleeves:false, showHip:false, showWaist:false, lengthOption:"fianchi"},
+    abito:   {hasSleeves:true,  showHip:true,  showWaist:false, lengthOption:"tunica"},
+    top:     {hasSleeves:false, showHip:false, showWaist:false, lengthOption:"vita"}
+  };
+
+  var LENGTH_ADD = {vita:0, fianchi:15, tunica:28};
+
+  function round1(n){ return Math.round(n*10)/10; }
+  function fmt(n){
+    var r = round1(n);
+    return (Math.abs(r % 1) < 0.001) ? String(Math.round(r)) : String(r).replace(".", ",");
+  }
+  function toIn(cm){ return round1(cm/2.54); }
+  function roundEven(n){ return Math.round(n/2)*2; }
+
+  function saveLocal(){
+    try{
+      localStorage.setItem("vestibilita_state_v2", JSON.stringify({
+        craft:state.craft, garment:state.garment, hasSleeves:state.hasSleeves, showHip:state.showHip,
+        showWaist:state.showWaist, lengthOption:state.lengthOption, fit:state.fit, customEase:state.customEase,
+        base:state.base, showInches:state.showInches, gaugeStitches:state.gaugeStitches, gaugeRows:state.gaugeRows
+      }));
+    }catch(e){}
+  }
+  function loadLocal(){
+    try{
+      var raw = localStorage.getItem("vestibilita_state_v2");
+      if(!raw) return;
+      var d = JSON.parse(raw);
+      Object.keys(d).forEach(function(k){ if(k in state) state[k] = d[k]; });
+    }catch(e){}
+  }
+
+  function currentEase(){
+    var f = FITS.filter(function(f){return f.key===state.fit;})[0];
+    return f.key === "custom" ? state.customEase : f.ease;
+  }
+
+  // ---------- BUILD STATIC UI ----------
+  function buildFitGrid(){
+    var grid = document.getElementById("fitGrid");
+    grid.innerHTML = "";
+    FITS.forEach(function(f){
+      var el = document.createElement("div");
+      el.className = "fit-card" + (f.key==="custom" ? " custom-card" : "") + (state.fit===f.key ? " active" : "");
+      el.setAttribute("data-fit", f.key);
+      if(f.key === "custom"){
+        el.innerHTML =
+          '<p class="name">Personalizzata</p>' +
+          '<div class="slider-row">' +
+            '<input type="range" min="-15" max="40" step="1" id="customEaseRange" value="'+state.customEase+'">' +
+            '<span class="custom-val" id="customEaseVal">'+ (state.customEase>0? "+":"") + fmt(state.customEase) +' cm</span>' +
+          '</div>' +
+          '<p class="desc">Imposta tu l\'agio esatto in centimetri.</p>';
+      } else {
+        el.innerHTML =
+          '<p class="name">'+f.name+'</p>' +
+          '<p class="range">'+f.range+'</p>' +
+          '<p class="desc">'+f.desc+'</p>';
+      }
+      el.addEventListener("click", function(ev){
+        if(ev.target && (ev.target.id === "customEaseRange")) return;
+        state.fit = f.key;
+        buildFitGrid();
+        render();
+      });
+      grid.appendChild(el);
+    });
+    var range = document.getElementById("customEaseRange");
+    if(range){
+      range.addEventListener("input", function(){
+        state.customEase = parseInt(range.value, 10);
+        document.getElementById("customEaseVal").textContent = (state.customEase>0? "+":"") + fmt(state.customEase) + " cm";
+        state.fit = "custom";
+        render(true);
+      });
+      range.addEventListener("click", function(e){ e.stopPropagation(); });
+    }
+  }
+
+  function buildBaseEditTable(){
+    var t = document.getElementById("baseEditTable");
+    var rowsDef = [["bust","Busto"],["waist","Vita"],["hip","Fianchi"]];
+    var html = "<tr><th></th>";
+    SIZES.forEach(function(s){ html += "<th>"+s+"</th>"; });
+    html += "</tr>";
+    rowsDef.forEach(function(rd){
+      html += "<tr><td>"+rd[1]+"</td>";
+      SIZES.forEach(function(s, i){
+        html += '<td><input type="number" step="0.5" data-key="'+rd[0]+'" data-idx="'+i+'" value="'+state.base[rd[0]][i]+'"></td>';
+      });
+      html += "</tr>";
+    });
+    t.innerHTML = html;
+    t.querySelectorAll("input").forEach(function(inp){
+      inp.addEventListener("input", function(){
+        var key = inp.getAttribute("data-key");
+        var idx = parseInt(inp.getAttribute("data-idx"),10);
+        var v = parseFloat(inp.value);
+        if(!isNaN(v)) state.base[key][idx] = v;
+        render(true);
+      });
+    });
+  }
+
+  // ---------- COMPUTE ----------
+  function compute(){
+    var ease = currentEase();
+    var out = {ease:ease, sizes:[]};
+    for(var i=0;i<SIZES.length;i++){
+      var s = {
+        bustBase: state.base.bust[i],
+        bustFinished: state.base.bust[i] + ease,
+        waistFinished: state.base.waist[i] + ease,
+        hipFinished: state.base.hip[i] + ease,
+        length: state.base.backWaistLength[i] + LENGTH_ADD[state.lengthOption],
+        crossBack: state.base.crossBack[i],
+        armholeDepth: state.base.armholeDepth[i],
+        sleeveLength: state.base.sleeveLength[i],
+        upperArm: state.base.upperArm[i]
+      };
+      if(state.gaugeStitches){
+        s.stitchesBody = roundEven(s.bustFinished * state.gaugeStitches / 10);
+        s.stitchesHip = roundEven(s.hipFinished * state.gaugeStitches / 10);
+        s.stitchesUpperArm = roundEven(s.upperArm * state.gaugeStitches / 10);
+      }
+      if(state.gaugeRows){
+        s.rowsLength = Math.round(s.length * state.gaugeRows / 10);
+        s.rowsArmhole = Math.round(s.armholeDepth * state.gaugeRows / 10);
+        s.rowsSleeve = Math.round(s.sleeveLength * state.gaugeRows / 10);
+      }
+      out.sizes.push(s);
+    }
+    return out;
+  }
+
+  // ---------- RENDER RESULTS ----------
+  function cell(cmVal){
+    return '<span class="cmv">'+fmt(cmVal)+'</span><span class="in">'+fmt(toIn(cmVal))+' in</span>';
+  }
+
+  function parseCycRange(range, i){
+    return {lo:range.lo[i], hi:range.hi[i]};
+  }
+
+  function render(){
+    document.getElementById("crochetNote").style.display = state.craft==="uncinetto" ? "block":"none";
+
+    var data = compute();
+    var ease = data.ease;
+
+    var fitName = state.fit === "custom" ? "Personalizzata" : FITS.filter(function(f){return f.key===state.fit;})[0].name;
+    var summary = document.getElementById("summaryBar");
+    summary.innerHTML =
+      '<span class="pill">Vestibilità: <b>'+fitName+'</b></span>' +
+      '<span class="pill">Agio applicato: <b>'+(ease>0?"+":"")+fmt(ease)+' cm</b></span>' +
+      '<span class="pill">Capo: <b>'+document.getElementById("garmentType").options[document.getElementById("garmentType").selectedIndex].text+'</b></span>' +
+      '<span class="pill">Lavorazione: <b>'+(state.craft==="ferri"?"ai ferri":"all'uncinetto")+'</b></span>';
+
+    var highlightIdx = -1;
+    var finderVal = parseFloat(document.getElementById("finderInput").value);
+    var res = document.getElementById("finderResult");
+    if(!isNaN(finderVal)){
+      var bestIdx = 0, bestDist = Infinity, inRange = false;
+      for(var i=0;i<6;i++){
+        var r = parseCycRange(CYC.bust, i);
+        var dist = finderVal < r.lo ? r.lo - finderVal : (finderVal > r.hi ? finderVal - r.hi : 0);
+        if(dist < bestDist){ bestDist = dist; bestIdx = i; inRange = dist === 0; }
+      }
+      highlightIdx = bestIdx;
+      var r2 = parseCycRange(CYC.bust, bestIdx);
+      res.className = "finder-result show";
+      if(inRange){
+        res.innerHTML = "Con un giro busto di <b>"+fmt(finderVal)+" cm</b> rientri nella taglia CYC <b>"+SIZES[bestIdx]+"</b> (intervallo "+fmt(r2.lo)+"–"+fmt(r2.hi)+" cm). Con la vestibilità scelta sopra, la circonferenza finita per quella taglia sarà di <b>"+fmt(state.base.bust[bestIdx]+ease)+" cm</b>.";
+      } else {
+        res.innerHTML = "Con un giro busto di <b>"+fmt(finderVal)+" cm</b> cadi fuori dagli intervalli standard CYC: la taglia più vicina è <b>"+SIZES[bestIdx]+"</b> (intervallo "+fmt(r2.lo)+"–"+fmt(r2.hi)+" cm). Valuta una via di mezzo tra due taglie o un agio diverso.";
+      }
+    } else {
+      res.className = "finder-result";
+    }
+
+    var thead = "<thead><tr><th>Misura</th>";
+    SIZES.forEach(function(s,i){ thead += '<th'+(i===highlightIdx?' class="highlight-col"':'')+'>'+s+"</th>"; });
+    thead += "</tr></thead>";
+
+    function row(label, getter, opts){
+      opts = opts || {};
+      var html = "<tr><td class='rowlabel'>"+label+"</td>";
+      data.sizes.forEach(function(sz,i){
+        var v = getter(sz);
+        var cls = (opts.ref? " ref":"") + (i===highlightIdx? " highlight-col":"");
+        var content;
+        if(v===null||v===undefined){ content = "—"; }
+        else if(opts.raw){ content = v; }
+        else {
+          content = cell(v);
+          if(opts.rangeSrc){
+            var rr = parseCycRange(opts.rangeSrc, i);
+            content += "<span class='cyc-range'>CYC "+fmt(rr.lo)+"–"+fmt(rr.hi)+"</span>";
+          }
+        }
+        html += "<td class='"+cls.trim()+"'>" + content + "</td>";
+      });
+      html += "</tr>";
+      return html;
+    }
+    function groupRow(label, span){
+      return "<tr><th class='group-row' colspan='"+span+"'>"+label+"</th></tr>";
+    }
+
+    var span = SIZES.length + 1;
+    var body = "<tbody>";
+    body += groupRow("Corpo", span);
+    body += row("Giro busto corporeo (guida)", function(sz){return sz.bustBase;}, {ref:true, rangeSrc:CYC.bust});
+    body += row("Circonferenza petto finita", function(sz){return sz.bustFinished;});
+    if(state.showWaist) body += row("Circonferenza vita finita", function(sz){return sz.waistFinished;});
+    if(state.showHip) body += row("Circonferenza fianchi finita", function(sz){return sz.hipFinished;});
+    body += row("Lunghezza corpo (da base collo, dietro)", function(sz){return sz.length;});
+    body += row("Spalla a spalla", function(sz){return sz.crossBack;}, {ref:true, rangeSrc:CYC.crossBack});
+    body += row("Profondità scalfo (corporea)", function(sz){return sz.armholeDepth;}, {ref:true, rangeSrc:CYC.armholeDepth});
+
+    if(state.hasSleeves){
+      body += groupRow("Maniche", span);
+      body += row("Lunghezza manica (ascella-polso)", function(sz){return sz.sleeveLength;}, {ref:true});
+      body += row("Giro bicipite (corporeo)", function(sz){return sz.upperArm;}, {ref:true});
+    }
+
+    if(state.gaugeStitches || state.gaugeRows){
+      body += groupRow("Conteggio maglie e giri (dal tuo campione)", span);
+      if(state.gaugeStitches){
+        body += row("Maglie da avviare — corpo", function(sz){return sz.stitchesBody;}, {raw:true});
+        if(state.showHip) body += row("Maglie — giro fianchi", function(sz){return sz.stitchesHip;}, {raw:true});
+        if(state.hasSleeves) body += row("Maglie — giro bicipite", function(sz){return sz.stitchesUpperArm;}, {raw:true});
+      }
+      if(state.gaugeRows){
+        body += row("Giri per lunghezza corpo", function(sz){return sz.rowsLength;}, {raw:true});
+        body += row("Giri per profondità scalfo", function(sz){return sz.rowsArmhole;}, {raw:true});
+        if(state.hasSleeves) body += row("Giri per lunghezza manica", function(sz){return sz.rowsSleeve;}, {raw:true});
+      }
+    }
+    body += "</tbody>";
+
+    var table = document.getElementById("resultsTable");
+    table.className = "results" + (state.showInches ? "" : " in-hidden");
+    table.innerHTML = thead + body;
+
+    saveLocal();
+  }
+
+  // ---------- WIRE UP ----------
+  function wire(){
+    document.querySelectorAll("#craftToggle .toggle-btn").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        document.querySelectorAll("#craftToggle .toggle-btn").forEach(function(b){b.classList.remove("active");});
+        btn.classList.add("active");
+        state.craft = btn.getAttribute("data-craft");
+        render();
+      });
+      if(btn.getAttribute("data-craft")===state.craft) btn.classList.add("active");
+      else btn.classList.remove("active");
+    });
+
+    var gSel = document.getElementById("garmentType");
+    gSel.value = state.garment;
+    gSel.addEventListener("change", function(){
+      state.garment = gSel.value;
+      var g = GARMENTS[state.garment];
+      state.hasSleeves = g.hasSleeves;
+      state.showHip = g.showHip;
+      state.showWaist = g.showWaist;
+      state.lengthOption = g.lengthOption;
+      document.getElementById("hasSleeves").checked = state.hasSleeves;
+      document.getElementById("showHip").checked = state.showHip;
+      document.getElementById("showWaist").checked = state.showWaist;
+      document.getElementById("lengthOption").value = state.lengthOption;
+      render();
+    });
+
+    var lenSel = document.getElementById("lengthOption");
+    lenSel.value = state.lengthOption;
+    lenSel.addEventListener("change", function(){ state.lengthOption = lenSel.value; render(); });
+
+    document.getElementById("hasSleeves").addEventListener("change", function(e){ state.hasSleeves = e.target.checked; render(); });
+    document.getElementById("showHip").addEventListener("change", function(e){ state.showHip = e.target.checked; render(); });
+    document.getElementById("showWaist").addEventListener("change", function(e){ state.showWaist = e.target.checked; render(); });
+
+    document.getElementById("resetBase").addEventListener("click", function(){
+      state.base = JSON.parse(JSON.stringify(DEFAULT_BASE));
+      buildBaseEditTable();
+      render();
+    });
+
+    document.getElementById("finderInput").addEventListener("input", function(){ render(); });
+
+    document.getElementById("gaugeStitches").addEventListener("input", function(e){
+      var v = parseFloat(e.target.value); state.gaugeStitches = isNaN(v) || v<=0 ? null : v; render();
+    });
+    document.getElementById("gaugeRows").addEventListener("input", function(e){
+      var v = parseFloat(e.target.value); state.gaugeRows = isNaN(v) || v<=0 ? null : v; render();
+    });
+
+    var sw = document.getElementById("inSwitch");
+    sw.addEventListener("click", function(){
+      state.showInches = !state.showInches;
+      sw.classList.toggle("on", state.showInches);
+      render();
+    });
+  }
+
+  function applyStateToInputs(){
+    document.getElementById("hasSleeves").checked = state.hasSleeves;
+    document.getElementById("showHip").checked = state.showHip;
+    document.getElementById("showWaist").checked = state.showWaist;
+    if(state.gaugeStitches) document.getElementById("gaugeStitches").value = state.gaugeStitches;
+    if(state.gaugeRows) document.getElementById("gaugeRows").value = state.gaugeRows;
+    document.getElementById("inSwitch").classList.toggle("on", state.showInches);
+  }
+
+  loadLocal();
+  buildFitGrid();
+  buildBaseEditTable();
+  wire();
+  applyStateToInputs();
+  render();
+})();
+</script>

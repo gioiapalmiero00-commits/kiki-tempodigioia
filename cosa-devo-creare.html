@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cosa devo creare? | Kiki, Tempo di Gioia</title>
+<meta name="description" content="Non sai cosa progettare oggi? Genera una piccola sfida di design all'uncinetto o ai ferri e scopri cosa potresti provare a fare." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..900&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">Kiki<small>Tempo di Gioia</small></a>
+    <div class="nav-links" id="nav-links">
+      <a href="index.html">Home</a>
+      <a href="chi-sono.html">Chi sono</a>
+      <a href="pattern.html">Pattern</a>
+      <a href="buono-regalo.html">Buono regalo</a>
+      <a href="minigioco.html">L'Atelier</a>
+      <a href="idee.html">Lascia un'idea</a>
+      <a href="cosa-devo-creare.html" aria-current="page">Cosa creare?</a>
+      <a href="index.html#newsletter">Newsletter</a>
+      <a href="https://www.instagram.com/kiki.tempodigioia" target="_blank" rel="noopener">Instagram</a>
+    </div>
+    <button class="nav-toggle" aria-label="Apri il menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </nav>
+</header>
+
+<section class="hero">
+  <svg class="flower" style="top:14%;left:8%;color:var(--color-blue)" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g><ellipse cx="50" cy="22" rx="17" ry="24"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(72 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(144 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(216 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(288 50 50)"/></g></svg>
+  <div class="wrap">
+    <span class="eyebrow">Un piccolo spunto</span>
+    <h1>Non sai cosa<br/>progettare oggi?</h1>
+    <p class="lede">Non è un generatore di "fai una sciarpa". È un piccolo spunto di design: un punto di partenza — una forma, una costruzione, un dettaglio da esplorare — non un pattern già pronto. Cosa ne fai è una tua scelta.</p>
+  </div>
+</section>
+
+<section class="section-cream">
+  <div class="wrap" style="max-width:720px">
+    <div class="card" style="padding:clamp(28px,4vw,48px);text-align:center">
+      <span class="badge" id="challenge-badge">La tua sfida di design</span>
+      <p id="challenge-text" style="font-family:var(--font-display);font-size:clamp(1.3rem,2.4vw,1.7rem);font-weight:700;line-height:1.35;margin:20px 0 28px">
+        Premi il bottone e scopri la tua sfida.
+      </p>
+      <button type="button" id="generate-btn" class="btn btn-primary">Genera una sfida</button>
+    </div>
+
+    <div class="card" id="after-card" style="margin-top:24px;text-align:center;display:none">
+      <p class="lede" style="margin-inline:auto;margin-bottom:16px">Ti è venuta in mente un'idea concreta mentre leggevi? Non lasciarla perdere.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <a href="idee.html" class="btn btn-outline">Raccontamela →</a>
+        <a href="https://www.instagram.com/kiki.tempodigioia" target="_blank" rel="noopener" class="btn btn-outline">Condividila su Instagram</a>
+      </div>
+    </div>
+
+    <div style="margin-top:32px;text-align:center">
+      <p class="lede" style="margin-inline:auto;opacity:0.75;font-size:0.95rem">Perché te lo propongo: progettare non è solo eseguire un tutorial — è fare scelte (forma, costruzione, dettaglio). Questo è solo un modo leggero per allenare quello sguardo, anche nei giorni in cui l'ispirazione non arriva da sola.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap footer-bottom">
+    <span>© <span id="year"></span> Kiki, Tempo di Gioia</span>
+    <a href="index.html">Torna al sito</a>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+
+(function () {
+  var tipi = [
+    "un accessorio rapido, pensato per essere un primo regalo fatto a mano",
+    "un capo pensato per la vita di tutti i giorni, non per un'occasione speciale",
+    "un progetto piccolo, ma con una tecnica che non hai mai provato prima",
+    "qualcosa pensato per una serata o un'occasione precisa",
+    "un oggetto per la casa, non per il corpo — un capo che non si indossa"
+  ];
+
+  var livelli = [
+    "pensato per chi muove i primi passi",
+    "di livello intermedio",
+    "pensato per chi vuole sperimentare qualcosa di più difficile del solito"
+  ];
+
+  var elementi = [
+    "una silhouette che di solito non useresti",
+    "una costruzione pensata per non avere cuciture",
+    "un dettaglio a contrasto di colore, ben visibile",
+    "una texture a rilievo, non solo punto liscio",
+    "un aumento o una diminuzione trasformati in dettaglio decorativo, non solo in tecnica"
+  ];
+
+  var mood = [
+    "ispirato a un ricordo d'infanzia",
+    "ispirato ai colori di questa stagione",
+    "pensato per reinventare un capo che indossi già spesso",
+    "senza nessuna ispirazione precisa — lascia decidere alle mani, non alla testa"
+  ];
+
+  function pick(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  var btn = document.getElementById("generate-btn");
+  var text = document.getElementById("challenge-text");
+  var afterCard = document.getElementById("after-card");
+
+  btn.addEventListener("click", function () {
+    var frase =
+      "Prova a progettare " + pick(tipi) + ", " + pick(livelli) +
+      ". Presta particolare attenzione a " + pick(elementi) + ", " + pick(mood) + ".";
+    text.textContent = frase;
+    btn.textContent = "Genera un'altra sfida";
+    afterCard.style.display = "block";
+  });
+})();
+</script>
+</body>
+</html>

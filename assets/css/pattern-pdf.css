@@ -1,0 +1,509 @@
+/* =========================================================
+   Kiki, Tempo di Gioia — Template PDF pattern
+   Estende i design token di style.css con componenti pensati
+   per documenti stampabili (A4), leggibili e accessibili.
+
+   REGOLA DI CONTRASTO (verificata su AA WCAG, testo normale ≥4.5:1):
+   - --color-ink su --pdf-paper / --pdf-tint         → 15.8–16:1 (usa SEMPRE per il corpo del testo)
+   - --color-ink-muted su --pdf-paper                → 7.3:1    (per didascalie/footer che vuoi più discreti — MAI opacity su testo)
+   - --color-raspberry su --pdf-paper / --pdf-tint    → 5.6:1 / 7.3:1 (titoli, eyebrow — solo su sfondo pieno, mai su tinta dello stesso colore)
+   - --color-raspberry-dark su --pdf-tint             → 7.3:1   (label nei box/callout, extra margine di sicurezza)
+   - --color-blue su --pdf-paper                      → 5.2:1
+   - --color-blue-dark su tinta azzurrina leggera      → 7.5:1   (label nei callout "nota")
+   - --color-olive                                     → 4.1:1 su sfondo chiaro: MAI corpo testo, solo badge grandi/bold
+   - --color-orange                                    → 2.8:1: MAI come colore testo, solo sfondo pieno o decorazione
+   - --color-cream-light su --color-raspberry / --color-ink → 5.4:1 / 16:1 (blocchi pieni: cover, footer, coupon — MAI con opacity)
+
+   REGOLA CHIAVE (causa del bug corretto in questa versione):
+   non mescolare mai un colore accento a bassa opacità nello sfondo
+   E usare lo STESSO colore per il testo sopra — i due sfondi si
+   avvicinano e il contrasto crolla sotto soglia anche se sembra ok
+   a occhio (è il difetto "azzurrino su azzurrino" segnalato).
+   Regola adottata: sfondo = tinta leggerissima di un colore,
+   testo = --color-ink oppure la variante "-dark" dello stesso colore,
+   mai la versione piena chiara su una tinta chiara dello stesso colore.
+   ========================================================= */
+
+:root {
+  --pdf-paper: #faf9f4;       /* sostituisce --color-cream-light come sfondo pagina: meno giallo, più bianco caldo */
+  --pdf-tint: #f3efe2;        /* sostituisce --color-cream per zebra-righe/box: stesso ruolo ma meno saturo */
+  --color-ink-muted: #5b5147; /* testo secondario leggibile, al posto di ink + opacity */
+  --color-blue-dark: #124e78; /* variante scura di --color-blue, per testo su tinta azzurrina */
+}
+
+.pdf-viewport {
+  background: #ded7c4;
+  padding: 40px 0 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+.pdf-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--color-ink);
+  color: var(--color-cream-light);
+  width: 100%;
+  padding: 14px var(--gutter);
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+}
+
+.pdf-toolbar button {
+  background: var(--color-raspberry);
+  color: var(--color-cream-light);
+  border: none;
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-weight: 700;
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+.pdf-page {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--pdf-paper);
+  box-shadow: 0 12px 40px rgba(28, 20, 15, 0.25);
+  padding: 16mm 16mm 14mm;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  color: var(--color-ink);
+}
+
+.pdf-page-body { flex: 1; display: flex; flex-direction: column; }
+
+/* -------- Running header / footer on content pages -------- */
+.pdf-runhead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid rgba(28, 20, 15, 0.15);
+  padding-bottom: 10px;
+  margin-bottom: 22px;
+  font-family: var(--font-body);
+}
+
+.pdf-runhead .brand {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: var(--color-raspberry);
+  font-size: 0.95rem;
+}
+
+.pdf-runhead .section {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--color-ink-muted);
+}
+
+.pdf-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(28, 20, 15, 0.15);
+  padding-top: 10px;
+  margin-top: 22px;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  color: var(--color-ink-muted);
+}
+
+.pdf-footer .flower { width: 14px; height: 14px; color: var(--color-raspberry); }
+.pdf-footer-left { display: flex; align-items: center; gap: 8px; }
+
+/* -------- Typography -------- */
+.pdf-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-raspberry);
+  margin-bottom: 10px;
+}
+
+.pdf-page h1.pdf-h1 {
+  font-size: 30pt;
+  margin: 0 0 6px;
+  color: var(--color-ink);
+}
+
+.pdf-page h2.pdf-h2 {
+  font-size: 18pt;
+  margin: 0 0 14px;
+  color: var(--color-ink);
+}
+
+.pdf-page h3.pdf-h3 {
+  font-size: 12.5pt;
+  margin: 0 0 6px;
+  color: var(--color-raspberry-dark);
+}
+
+.pdf-lede { font-size: 10.5pt; line-height: 1.65; max-width: 62ch; }
+.pdf-body-text { font-size: 10pt; line-height: 1.7; }
+
+/* -------- Cover -------- */
+.pdf-cover {
+  background: var(--color-raspberry);
+  color: var(--color-cream-light);
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  overflow: hidden;
+}
+
+.pdf-cover .flower-deco {
+  position: absolute;
+  opacity: 0.16;
+  color: var(--color-cream-light);
+}
+
+.pdf-cover-brand {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 15pt;
+  letter-spacing: 0.02em;
+  z-index: 1;
+}
+
+.pdf-cover-brand small {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 7pt;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-cream-light);
+  margin-top: 4px;
+}
+
+.pdf-cover-photo {
+  width: 100mm;
+  aspect-ratio: 4/5;
+  margin: 14px auto;
+  border-radius: var(--radius-md);
+  border: 3px solid var(--color-cream-light);
+  background: repeating-linear-gradient(135deg, rgba(255,255,255,0.16) 0 22px, rgba(255,255,255,0.06) 22px 44px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-size: 9pt;
+  font-weight: 600;
+  padding: 16px;
+  z-index: 1;
+}
+
+.pdf-photo-caption {
+  display: inline-block;
+  background: rgba(28, 20, 15, 0.72);
+  color: var(--color-cream-light);
+  padding: 8px 14px;
+  border-radius: 999px;
+  line-height: 1.5;
+}
+
+.pdf-cover-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 38pt;
+  line-height: 1;
+  margin: 6px 0 4px;
+  color: var(--color-cream-light);
+  z-index: 1;
+}
+
+.pdf-cover-sub {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 10pt;
+  color: var(--color-cream-light);
+  margin-bottom: 18px;
+  z-index: 1;
+}
+
+.pdf-meta-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  z-index: 1;
+}
+
+.pdf-meta-badge {
+  border: 1.5px solid rgba(251, 243, 220, 0.85);
+  border-radius: 999px;
+  padding: 7px 16px;
+  font-family: var(--font-body);
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-cream-light);
+}
+
+.pdf-cover-footer {
+  font-family: var(--font-body);
+  font-size: 7.5pt;
+  color: var(--color-cream-light);
+  z-index: 1;
+  margin-top: 20px;
+}
+
+/* -------- Two-column layout -------- */
+.pdf-cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+
+/* -------- Index list -------- */
+.pdf-index-list { list-style: none; margin: 0; padding: 0; }
+.pdf-index-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 9px 0;
+  border-bottom: 1px dotted rgba(28, 20, 15, 0.25);
+  font-family: var(--font-body);
+  font-size: 10.5pt;
+}
+.pdf-index-list .num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: var(--color-raspberry);
+}
+
+/* -------- Legal / license box -------- */
+.pdf-box {
+  border: 1.5px solid rgba(28, 20, 15, 0.18);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  background: var(--pdf-tint);
+}
+
+.pdf-box h3 { margin-top: 0; }
+.pdf-box ul, .pdf-box ol { margin: 0; padding-left: 1.1em; font-size: 9.5pt; line-height: 1.6; }
+.pdf-box li { margin-bottom: 4px; }
+
+/* -------- Legend / symbols key -------- */
+.pdf-legend { display: grid; gap: 10px; margin-top: 14px; }
+.pdf-legend-item { display: flex; align-items: center; gap: 10px; font-size: 9.5pt; }
+.pdf-legend-item svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--color-raspberry); }
+
+/* -------- Tables (materials, sizes, abbreviations) -------- */
+.pdf-table { width: 100%; border-collapse: collapse; font-size: 9.5pt; margin-bottom: 18px; }
+.pdf-table caption {
+  text-align: left;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 8pt;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-raspberry);
+  margin-bottom: 8px;
+}
+.pdf-table th {
+  background: var(--color-ink);
+  color: var(--color-cream-light);
+  text-align: left;
+  padding: 9px 12px;
+  font-weight: 700;
+  font-size: 8.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.pdf-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(28, 20, 15, 0.12);
+}
+.pdf-table tr:nth-child(even) td { background: var(--pdf-tint); }
+
+/* -------- Measurement diagram placeholder -------- */
+.pdf-diagram {
+  aspect-ratio: 16/10;
+  border-radius: var(--radius-md);
+  border: 2px dashed rgba(28, 20, 15, 0.3);
+  background: repeating-linear-gradient(135deg, var(--pdf-tint) 0 24px, var(--pdf-paper) 24px 48px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 10pt;
+  padding: 24px;
+  color: var(--color-ink);
+}
+
+/* -------- Step blocks (istruzioni) -------- */
+.pdf-step {
+  display: grid;
+  grid-template-columns: 34px 1fr 130px;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(28, 20, 15, 0.12);
+  align-items: start;
+}
+
+.pdf-step-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-raspberry);
+  color: var(--color-cream-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 12pt;
+}
+
+.pdf-step h4 {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 10.5pt;
+  margin: 0 0 6px;
+  color: var(--color-ink);
+}
+
+.pdf-step p { font-size: 9.5pt; line-height: 1.65; margin: 0 0 8px; }
+.pdf-step p:last-child { margin-bottom: 0; }
+
+.pdf-step-photo {
+  aspect-ratio: 4/5;
+  border-radius: var(--radius-sm);
+  background: repeating-linear-gradient(135deg, var(--pdf-tint) 0 14px, var(--pdf-paper) 14px 28px);
+  border: 1.5px dashed rgba(28, 20, 15, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 7.5pt;
+  font-weight: 600;
+  text-align: center;
+  padding: 8px;
+}
+
+/* -------- Callouts: tip / note / video -------- */
+/* Sfondo = tinta molto leggera (7%) di un accento su --pdf-paper.
+   Testo del corpo = --color-ink SEMPRE. Il label "strong" usa la
+   variante "-dark" dell'accento (mai la versione chiara/piena):
+   così anche se lo sfondo prende una sfumatura di colore, il testo
+   resta sempre nettamente più scuro dello sfondo (margine >7:1),
+   invece di avvicinarsi come succedeva con testo e sfondo dello
+   stesso colore chiaro (il difetto "azzurrino su azzurrino"). */
+.pdf-callout {
+  display: flex;
+  gap: 10px;
+  padding: 11px 14px 11px 16px;
+  border-radius: var(--radius-sm);
+  border-left: 4px solid;
+  font-size: 9.3pt;
+  line-height: 1.55;
+  margin: 12px 0;
+  align-items: flex-start;
+  color: var(--color-ink);
+}
+.pdf-callout svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+.pdf-callout strong { display: block; font-size: 8pt; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px; }
+
+.pdf-callout--tip { background: rgba(193, 25, 82, 0.07); border-left-color: var(--color-raspberry); }
+.pdf-callout--tip svg { color: var(--color-raspberry); }
+.pdf-callout--tip strong { color: var(--color-raspberry-dark); }
+
+.pdf-callout--note { background: rgba(27, 110, 165, 0.07); border-left-color: var(--color-blue); }
+.pdf-callout--note svg { color: var(--color-blue); }
+.pdf-callout--note strong { color: var(--color-blue-dark); }
+
+.pdf-video-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--color-ink);
+  color: var(--color-cream-light);
+  border-radius: 999px;
+  padding: 6px 14px 6px 10px;
+  font-size: 8pt;
+  font-weight: 700;
+  margin: 4px 0 10px;
+}
+.pdf-video-chip svg { width: 14px; height: 14px; }
+
+/* -------- Bonus / thank-you page -------- */
+.pdf-thanks-hero {
+  text-align: center;
+  padding: 6px 0 24px;
+}
+
+.pdf-coupon {
+  background: var(--color-raspberry);
+  color: var(--color-cream-light);
+  border-radius: var(--radius-md);
+  border: 2px dashed rgba(251, 243, 220, 0.6);
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.pdf-coupon-label { font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+.pdf-coupon-code {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 20pt;
+  letter-spacing: 0.06em;
+}
+.pdf-coupon-terms { font-size: 7.8pt; max-width: 22ch; text-align: right; }
+
+.pdf-social-cta {
+  border: 1.5px solid rgba(28, 20, 15, 0.18);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin: 16px 0;
+  background: var(--pdf-tint);
+}
+.pdf-social-cta svg { width: 30px; height: 30px; color: var(--color-raspberry); flex-shrink: 0; }
+.pdf-social-cta h3 { margin: 0 0 4px; }
+.pdf-social-cta p { margin: 0; font-size: 9.3pt; }
+
+.pdf-signoff {
+  margin-top: auto;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: italic;
+  font-size: 11pt;
+  color: var(--color-raspberry-dark);
+}
+
+/* -------- Print -------- */
+@media print {
+  @page { size: A4; margin: 0; }
+  body { background: none; }
+  .pdf-viewport { background: none; padding: 0; gap: 0; }
+  .pdf-toolbar, .no-print { display: none !important; }
+  .pdf-page {
+    box-shadow: none;
+    width: 210mm;
+    min-height: 297mm;
+    page-break-after: always;
+    margin: 0;
+  }
+  .pdf-page:last-child { page-break-after: auto; }
+}

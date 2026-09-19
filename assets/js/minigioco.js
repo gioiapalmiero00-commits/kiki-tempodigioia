@@ -1,0 +1,522 @@
+/* Logica del minigioco "L'Atelier di Kiki" — demo con dati finti, salvataggio in localStorage (solo su questo browser). */
+
+(function () {
+  var STORAGE_KEY = "atelierKikiDemo";
+
+  /* Stesso Form Formspree usato in idee.html: un solo canale reale per tutte le idee
+     raccolte sul sito, dentro o fuori dall'Atelier. Sostituisci qui e in idee.html
+     con lo stesso Form ID quando è pronto. */
+  var IDEA_FORM_ACTION = "https://formspree.io/f/FORM_ID_IDEE_DA_SOSTITUIRE";
+
+  function sendIdea(text, fonte) {
+    if (IDEA_FORM_ACTION.indexOf("FORM_ID_IDEE_DA_SOSTITUIRE") !== -1) {
+      console.warn("Kiki Atelier: collega un Form ID Formspree reale (lo stesso di idee.html) per ricevere davvero le idee da “" + fonte + "” — per ora restano solo nel gioco.");
+      return;
+    }
+    var body = new FormData();
+    body.append("idea", text);
+    body.append("fonte", fonte);
+    fetch(IDEA_FORM_ACTION, {
+      method: "POST",
+      headers: { Accept: "application/json" },
+      body: body
+    }).catch(function () {
+      /* invio non riuscito: i gomitoli restano comunque assegnati, è solo la demo locale */
+    });
+  }
+
+  /* Esempio illustrativo: il capo reale in regalo non è ancora deciso (open question).
+     Basta cambiare questo nome + le 5 tappe sotto quando Gioia sceglie il pattern definitivo. */
+  var PATTERN_NAME = "Borsa Girasole";
+
+  var STAGES = [
+    { title: "Il fondo rotondo", desc: "La base da cui parte tutta la borsa: un fondo rotondo stabile e pulito." },
+    { title: "Il corpo della borsa", desc: "Costruiamo insieme il corpo, giro dopo giro, con la giusta tensione." },
+    { title: "I manici", desc: "Impostiamo i manici, comodi da portare e proporzionati alla borsa." },
+    { title: "La chiusura", desc: "La rifinitura del bordo superiore e il sistema di chiusura." },
+    { title: "Il girasole applicato", desc: "Il tocco finale: il fiore che dà il nome alla borsa." }
+  ];
+
+  var STAGE_COLORS = [
+    "var(--color-raspberry)",
+    "var(--color-orange)",
+    "var(--color-blue)",
+    "var(--color-olive)",
+    "var(--color-raspberry)"
+  ];
+
+  var IDEAS = [
+    { author: "Marta", text: "Un gilet corto da abbinare a tutto, per la mezza stagione." },
+    { author: "Elisa", text: "Una borsa a rete per la spiaggia, veloce da fare in un weekend." },
+    { author: "Noemi", text: "Calzini fatti ai ferri per chi non li ha mai provati." },
+    { author: "Vale", text: "Un top estivo in cotone, taglia unica regolabile." }
+  ];
+
+  var RANKS = [
+    { min: 0, name: "Apprendista del Filo" },
+    { min: 40, name: "Amica dell'Uncinetto" },
+    { min: 100, name: "Mano Esperta" },
+    { min: 200, name: "Designer in Erba" }
+  ];
+
+  function loadState() {
+    var fallback = {
+      gomitoli: 0,
+      badges: [],
+      libDone: [],
+      dreamSent: false,
+      votes: { 0: 3, 1: 5, 2: 2, 3: 4 },
+      votedIdea: null,
+      ideaProposed: false,
+      dailyDone: null,
+      spun: null
+    };
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return fallback;
+      var parsed = JSON.parse(raw);
+      return Object.assign(fallback, parsed);
+    } catch (e) {
+      return fallback;
+    }
+  }
+
+  var state = loadState();
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      /* localStorage non disponibile: la demo continua senza persistenza */
+    }
+  }
+
+  function todayKey() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  function rankFor(g) {
+    var current = RANKS[0];
+    for (var i = 0; i < RANKS.length; i++) {
+      if (g >= RANKS[i].min) current = RANKS[i];
+    }
+    return current;
+  }
+
+  function nextRank(g) {
+    for (var i = 0; i < RANKS.length; i++) {
+      if (RANKS[i].min > g) return RANKS[i];
+    }
+    return null;
+  }
+
+  /* ---------- Il filo: solo le tappe costruttive del capo in regalo ---------- */
+  function isStageDone(i) {
+    return state.libDone.indexOf(i) !== -1;
+  }
+
+  function isStageUnlocked(i) {
+    return i === 0 || isStageDone(i - 1);
+  }
+
+  function isPatternDone() {
+    return state.libDone.length === STAGES.length;
+  }
+
+  /* ---------- Nodi in orbita: le altre funzionalità, staccate dal filo ---------- */
+  function isRoomDone(room) {
+    if (room === "capanna") return state.dreamSent;
+    if (room === "sfida") return state.votedIdea !== null;
+    if (room === "giorno") return state.dailyDone === todayKey();
+    if (room === "ruota") return state.spun === todayKey();
+    return false;
+  }
+
+  function milestoneCount() {
+    var n = 0;
+    if (isPatternDone()) n++;
+    if (state.dreamSent) n++;
+    if (state.votedIdea !== null) n++;
+    if (state.dailyDone === todayKey()) n++;
+    if (state.spun === todayKey()) n++;
+    return n;
+  }
+
+  function addGomitoli(n, badge) {
+    state.gomitoli += n;
+    if (badge && state.badges.indexOf(badge) === -1) state.badges.push(badge);
+    saveState();
+    renderStatus();
+  }
+
+  function renderStatus() {
+    var rank = rankFor(state.gomitoli);
+    var next = nextRank(state.gomitoli);
+    document.getElementById("stat-gomitoli").textContent = state.gomitoli;
+    document.getElementById("stat-badge").textContent = state.badges.length;
+    document.getElementById("stat-mastery").textContent = milestoneCount() + "/5";
+    document.getElementById("rank-name").textContent = rank.name;
+    var pct = next ? Math.min(100, Math.round(((state.gomitoli - rank.min) / (next.min - rank.min)) * 100)) : 100;
+    document.getElementById("progress-fill").style.width = pct + "%";
+    var hint;
+    if (!next) {
+      hint = "Rango massimo raggiunto in questa demo";
+    } else {
+      hint = "A " + (next.min - state.gomitoli) + " gomitoli da “" + next.name + "”";
+      if (next.name === "Mano Esperta") hint += " — apre la Bottega delle Creazioni";
+    }
+    document.getElementById("rank-hint").textContent = hint;
+
+    /* Badge sulle tappe del filo (solo costruzione del capo) */
+    document.querySelectorAll(".thread-stop[data-stage]").forEach(function (stop) {
+      var i = parseInt(stop.getAttribute("data-stage"), 10);
+      var badgeEl = stop.querySelector(".badge");
+      var done = isStageDone(i);
+      var unlocked = isStageUnlocked(i);
+      stop.classList.toggle("is-locked", !unlocked);
+      if (!badgeEl) return;
+      if (done) {
+        badgeEl.textContent = "Fatta";
+        badgeEl.className = "badge badge-done";
+      } else if (unlocked) {
+        badgeEl.textContent = "Parte " + (i + 1);
+        badgeEl.className = "badge badge-new";
+      } else {
+        badgeEl.textContent = "Bloccata";
+        badgeEl.className = "badge badge-locked";
+      }
+    });
+
+    /* Segmenti del filo: colorati solo per le parti di costruzione completate */
+    for (var i = 0; i < STAGES.length; i++) {
+      var seg = document.getElementById("seg-" + i);
+      if (seg) seg.classList.toggle("is-done", isStageDone(i));
+    }
+
+    /* Badge sui nodi in orbita (entrambe le versioni, desktop e mobile) */
+    document.querySelectorAll(".orbit-node[data-room]").forEach(function (node) {
+      var room = node.getAttribute("data-room");
+      var badgeEl = node.querySelector(".badge");
+      if (!badgeEl) return;
+      if (room === "capanna") {
+        badgeEl.textContent = state.dreamSent ? "Inviata" : "Nuovo";
+        badgeEl.className = "badge " + (state.dreamSent ? "badge-done" : "badge-new");
+      }
+      if (room === "sfida") {
+        badgeEl.textContent = state.votedIdea !== null ? "Hai votato" : "Vota ora";
+        badgeEl.className = "badge " + (state.votedIdea !== null ? "badge-done" : "badge-new");
+      }
+      if (room === "giorno") {
+        var doneToday = state.dailyDone === todayKey();
+        badgeEl.textContent = doneToday ? "Fatto oggi" : "Oggi";
+        badgeEl.className = "badge " + (doneToday ? "badge-done" : "badge-new");
+      }
+      if (room === "ruota") {
+        var spunToday = state.spun === todayKey();
+        badgeEl.textContent = spunToday ? "Fatto oggi" : "Gira";
+        badgeEl.className = "badge " + (spunToday ? "badge-done" : "badge-new");
+      }
+      if (room === "bottega") {
+        var open = isBottegaUnlocked();
+        badgeEl.textContent = open ? "Aperta" : "Bloccata";
+        badgeEl.className = "badge " + (open ? "badge-new" : "badge-locked");
+        node.classList.toggle("is-locked", !open);
+      }
+    });
+  }
+
+  /* ---------- Overlay ---------- */
+  var overlay = document.getElementById("game-overlay");
+  var panel = document.getElementById("game-panel");
+
+  function openPanel(html) {
+    panel.innerHTML = html;
+    overlay.classList.add("open");
+    overlay.setAttribute("aria-hidden", "false");
+    var closeBtn = panel.querySelector(".panel-close");
+    if (closeBtn) closeBtn.addEventListener("click", closePanel);
+  }
+
+  function closePanel() {
+    overlay.classList.remove("open");
+    overlay.setAttribute("aria-hidden", "true");
+  }
+
+  overlay.addEventListener("click", function (e) {
+    if (e.target === overlay) closePanel();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closePanel();
+  });
+
+  function flowerIcon(color) {
+    return (
+      '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="currentColor" style="color:' +
+      color +
+      '"><g><ellipse cx="50" cy="22" rx="17" ry="24"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(72 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(144 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(216 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(288 50 50)"/></g></svg>'
+    );
+  }
+
+  function panelHead(title, color) {
+    return (
+      '<div class="panel-top"><span class="flower-badge">' +
+      flowerIcon(color) +
+      '</span><h3>' +
+      title +
+      '</h3><button class="panel-close" aria-label="Chiudi">✕</button></div>'
+    );
+  }
+
+  /* ---------- Pannello di una singola tappa del filo (una parte della costruzione) ---------- */
+  function renderStage(i) {
+    var stage = STAGES[i];
+    var done = isStageDone(i);
+    var html = panelHead(PATTERN_NAME + " — Parte " + (i + 1), STAGE_COLORS[i % STAGE_COLORS.length]);
+    html += '<p class="panel-intro">' + stage.desc + "</p>";
+    html += '<div class="video-slot">🎥 Video in arrivo — Gioia lo carica qui appena pronto</div>';
+    html +=
+      '<button class="btn btn-primary btn-small" id="stage-complete-btn" ' +
+      (done ? "disabled" : "") +
+      ">" +
+      (done ? "Parte completata" : "Segna come completata (+15)") +
+      "</button>";
+    if (done && i === STAGES.length - 1) {
+      html +=
+        '<p class="thankyou-note">Hai completato tutta la ' +
+        PATTERN_NAME +
+        '! Hai sbloccato il badge “Prima Trama”.</p>';
+    }
+    return html;
+  }
+
+  function renderStageLocked(i) {
+    var html = panelHead("Parte " + (i + 1) + " bloccata", "var(--color-ink)");
+    html +=
+      '<p class="panel-intro">Questa tappa si sblocca completando la Parte ' +
+      i +
+      " prima — un passo alla volta, senza fretta.</p>";
+    return html;
+  }
+
+  function openStage(i) {
+    if (!isStageUnlocked(i)) {
+      openPanel(renderStageLocked(i));
+      return;
+    }
+    openPanel(renderStage(i));
+    var btn = document.getElementById("stage-complete-btn");
+    if (btn) {
+      btn.addEventListener("click", function () {
+        if (state.libDone.indexOf(i) === -1) state.libDone.push(i);
+        saveState();
+        addGomitoli(15, "Prima Trama");
+        openPanel(renderStage(i));
+      });
+    }
+  }
+
+  /* ---------- Renderers dei nodi in orbita (funzionalità staccate dal filo) ---------- */
+  var renderers = {
+    capanna: function () {
+      var html = panelHead("La Capanna dei Sogni", "var(--color-orange)");
+      html += '<p class="panel-intro">Cosa vorresti creare con le tue mani, ma non hai ancora osato provare?</p>';
+      if (state.dreamSent) {
+        html += '<p class="thankyou-note">Grazie per averlo condiviso — mi aiuta davvero a scegliere i prossimi pattern.</p>';
+      } else {
+        html += '<div class="game-field"><label for="dream-input">Il tuo sogno con ago o uncinetto</label><textarea id="dream-input" placeholder="Es. Un abito intero, ma ho paura di sbagliare la vestibilità..."></textarea></div>';
+        html += '<div class="privacy-note">🔒 Resta tra noi: uso queste risposte solo per capire quali pattern progettare, non le pubblico mai.</div>';
+        html += '<p class="form-note" id="dream-empty-note" style="display:none;color:var(--color-raspberry)">Scrivi qualcosa prima di inviare — anche solo una riga va benissimo.</p>';
+        html += '<button class="btn btn-primary" id="dream-submit">Condividi con Gioia (+20)</button>';
+      }
+      return html;
+    },
+
+    sfida: function () {
+      var html = panelHead("La Sfida del Prossimo Pattern", "var(--color-blue)");
+      html += '<p class="panel-intro">Ogni tanto scelgo una piccola selezione tra le idee arrivate e la metto qui al voto — non tutte le idee ricevute finiscono in lista, solo quelle su cui vale la pena decidere insieme. Vota quella che ti convince di più.</p>';
+      var order = IDEAS.map(function (idea, i) {
+        return { idea: idea, i: i, votes: state.votes[i] || 0 };
+      }).sort(function (a, b) {
+        return b.votes - a.votes;
+      });
+      order.forEach(function (entry, rank) {
+        var voted = state.votedIdea === entry.i;
+        html += '<div class="idea-row"><span class="idea-rank">#' + (rank + 1) + "</span>";
+        html += '<div class="idea-info"><b>' + entry.idea.text + "</b><span>proposta da " + entry.idea.author + " · " + entry.votes + " voti</span></div>";
+        html +=
+          '<button class="vote-btn ' +
+          (voted ? "voted" : "") +
+          '" data-idea="' +
+          entry.i +
+          '" ' +
+          (state.votedIdea !== null ? "disabled" : "") +
+          ">" +
+          (voted ? "Votata" : "Vota") +
+          "</button></div>";
+      });
+      html += '<p class="prize-note">L’idea più votata diventa uno dei prossimi pattern gratuiti; chi l’ha proposta lo riceve in anteprima.</p>';
+      html += '<div class="idea-propose">';
+      html += '<h4>Non vedi la tua idea qui?</h4>';
+      if (state.ideaProposed) {
+        html += '<p class="thankyou-note">Grazie, l’ho ricevuta — se in tanti proponete la stessa cosa, è un buon segno che entri nella prossima tornata di voto.</p>';
+      } else {
+        html += '<p class="panel-intro" style="margin-bottom:12px">Proponila qui: la leggo personalmente, e se convince anche altre persone potrebbe finire nella prossima selezione da votare.</p>';
+        html += '<div class="game-field"><label for="idea-input">La tua proposta di pattern</label><textarea id="idea-input" placeholder="Es. Uno scaldacollo reversibile, facile ma non banale..."></textarea></div>';
+        html += '<p class="form-note" id="idea-empty-note" style="display:none;color:var(--color-raspberry)">Scrivi la tua idea prima di inviare — anche solo una riga va benissimo.</p>';
+        html += '<button class="btn btn-primary" id="idea-submit">Proponi la tua idea (+10)</button>';
+      }
+      html += '</div>';
+      return html;
+    },
+
+    giorno: function () {
+      var html = panelHead("Il Punto del Giorno", "var(--color-olive)");
+      var doneToday = state.dailyDone === todayKey();
+      html += '<p class="panel-intro">Un piccolo gesto al giorno, per restare in allenamento.</p>';
+      html += '<div class="stage-item"><span class="stage-num">🧶</span><div class="stage-body"><h4>Oggi: il nodo scorsoio</h4><p>Fanne uno e commenta “fatto” sotto il post di oggi su Instagram.</p></div></div>';
+      html +=
+        '<button class="btn btn-primary" id="daily-btn" ' +
+        (doneToday ? "disabled" : "") +
+        ">" +
+        (doneToday ? "Fatto per oggi" : "Segna come fatto (+10)") +
+        "</button>";
+      return html;
+    },
+
+    ruota: function () {
+      var html = panelHead("La Ruota dei Gomitoli", "var(--color-raspberry)");
+      var spunToday = state.spun === todayKey();
+      html += '<p class="panel-intro">Un giro al giorno, per un piccolo bonus di gomitoli.</p>';
+      html += '<div class="wheel-wrap"><div class="wheel" id="wheel-el"></div>';
+      html += '<div class="wheel-result" id="wheel-result">' + (spunToday ? "Torna domani per un altro giro" : "") + "</div>";
+      html += '<button class="btn btn-primary" id="wheel-btn" ' + (spunToday ? "disabled" : "") + ">" + (spunToday ? "Già girata oggi" : "Gira la ruota") + "</button></div>";
+      return html;
+    },
+
+    bottega: function () {
+      var html = panelHead("La Bottega delle Creazioni", "var(--color-blue)");
+      if (!isBottegaUnlocked()) {
+        html += '<div class="locked-panel"><span class="flower-badge">' + flowerIcon("var(--color-ink)") + "</span>";
+        html += "<p>Questa stanza si apre quando arrivi a “Mano Esperta” (100 gomitoli). Continua a raccogliere gomitoli nelle altre stanze per sbloccarla.</p></div>";
+        return html;
+      }
+      html += '<p class="panel-intro">Complimenti, sei arrivata a “' + rankFor(state.gomitoli).name + '”! Questo è quello che ti sei guadagnata.</p>';
+      html += '<div class="stage-item"><span class="stage-num">🎁</span><div class="stage-body"><h4>Contenuto extra dell\'Atelier</h4><p>Sto preparando il primo contenuto esclusivo riservato a chi arriva qui (schema bonus o video in più) — arriva a breve.</p></div></div>';
+      html += '<div class="stage-item"><span class="stage-num">🛍️</span><div class="stage-body"><h4>Un omaggio quando lo shop apre</h4><p>Il tuo rango resta salvato su questo browser: quando la collezione di pattern sarà in vendita, ti scriverò per darti un piccolo omaggio di lancio. Iscriviti alla newsletter per non perderlo.</p></div></div>';
+      return html;
+    }
+  };
+
+  function isBottegaUnlocked() {
+    var name = rankFor(state.gomitoli).name;
+    return name === "Mano Esperta" || name === "Designer in Erba";
+  }
+
+  function bindPanelEvents(room) {
+    if (room === "capanna") {
+      var submitBtn = document.getElementById("dream-submit");
+      if (submitBtn) {
+        submitBtn.addEventListener("click", function () {
+          var input = document.getElementById("dream-input");
+          var text = input ? input.value.trim() : "";
+          var emptyNote = document.getElementById("dream-empty-note");
+          if (!text) {
+            if (emptyNote) emptyNote.style.display = "block";
+            if (input) input.focus();
+            return;
+          }
+          sendIdea(text, "Capanna dei Sogni (Atelier)");
+          state.dreamSent = true;
+          saveState();
+          addGomitoli(20, "Cuore Aperto");
+          openPanel(renderers.capanna());
+          bindPanelEvents("capanna");
+        });
+      }
+    }
+    if (room === "sfida") {
+      panel.querySelectorAll("[data-idea]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          if (state.votedIdea !== null) return;
+          var i = parseInt(btn.getAttribute("data-idea"), 10);
+          state.votes[i] = (state.votes[i] || 0) + 1;
+          state.votedIdea = i;
+          saveState();
+          addGomitoli(5, "Voce della Community");
+          openPanel(renderers.sfida());
+          bindPanelEvents("sfida");
+        });
+      });
+      var ideaSubmitBtn = document.getElementById("idea-submit");
+      if (ideaSubmitBtn) {
+        ideaSubmitBtn.addEventListener("click", function () {
+          var input = document.getElementById("idea-input");
+          var text = input ? input.value.trim() : "";
+          var emptyNote = document.getElementById("idea-empty-note");
+          if (!text) {
+            if (emptyNote) emptyNote.style.display = "block";
+            if (input) input.focus();
+            return;
+          }
+          sendIdea(text, "Sfida del Prossimo Pattern (Atelier)");
+          state.ideaProposed = true;
+          saveState();
+          addGomitoli(10, "Idea Proposta");
+          openPanel(renderers.sfida());
+          bindPanelEvents("sfida");
+        });
+      }
+    }
+    if (room === "giorno") {
+      var dailyBtn = document.getElementById("daily-btn");
+      if (dailyBtn) {
+        dailyBtn.addEventListener("click", function () {
+          state.dailyDone = todayKey();
+          saveState();
+          addGomitoli(10);
+          openPanel(renderers.giorno());
+          bindPanelEvents("giorno");
+        });
+      }
+    }
+    if (room === "ruota") {
+      var wheelBtn = document.getElementById("wheel-btn");
+      if (wheelBtn) {
+        wheelBtn.addEventListener("click", function () {
+          var wheelEl = document.getElementById("wheel-el");
+          var reward = 8 + Math.floor(Math.random() * 18);
+          var spins = 4 + Math.random() * 2;
+          wheelEl.style.transform = "rotate(" + (360 * spins) + "deg)";
+          wheelBtn.disabled = true;
+          setTimeout(function () {
+            state.spun = todayKey();
+            saveState();
+            addGomitoli(reward);
+            document.getElementById("wheel-result").textContent = "+" + reward + " gomitoli!";
+          }, 2200);
+        });
+      }
+    }
+  }
+
+  function openRoom(room) {
+    openPanel(renderers[room]());
+    bindPanelEvents(room);
+  }
+
+  /* Le tappe del filo: solo la costruzione del capo in regalo */
+  document.querySelectorAll(".thread-stop[data-stage]").forEach(function (stop) {
+    stop.addEventListener("click", function () {
+      openStage(parseInt(stop.getAttribute("data-stage"), 10));
+    });
+  });
+
+  /* I nodi in orbita: le altre funzionalità, in entrambe le versioni (desktop + riga mobile) */
+  document.querySelectorAll(".orbit-node[data-room]").forEach(function (node) {
+    node.addEventListener("click", function () {
+      openRoom(node.getAttribute("data-room"));
+    });
+  });
+
+  renderStatus();
+})();

@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Template PDF Pattern — Kiki, Tempo di Gioia</title>
+
+<!--
+  ═══════════════════════════════════════════════════════════════════
+  COME USARE QUESTO TEMPLATE
+  ═══════════════════════════════════════════════════════════════════
+  1. Duplica questo file per ogni nuovo pattern
+     (es. "pattern-borsa-girasole.html") e apri la copia.
+  2. Sostituisci i testi segnati con [PARENTESI QUADRE] e i riquadri
+     tratteggiati "Foto da aggiungere" con le tue foto reali
+     (<img src="..." alt="...">  al posto del <div class="...-photo">).
+  3. Aggiungi/rimuovi blocchi ".pdf-step" nella sezione Istruzioni e
+     duplica ".pdf-page" per aggiungere altre pagine: ricordati che
+     ogni pagina deve restare 210mm x 297mm (A4) per stampare bene.
+  4. Aggiorna il numero pagina "X / Y" nel footer di ogni pagina.
+  5. ESPORTA IN PDF: apri il file in Chrome → Ctrl/Cmd+P → Destinazione
+     "Salva come PDF" → Layout verticale → Margini "Nessuno" →
+     spunta "Grafica di sfondo" (fondamentale, altrimenti perdi colori
+     e sfondi) → Salva.
+
+  REGOLE DI ACCESSIBILITÀ DA NON ROMPERE (dettagli in pattern-pdf.css):
+  - Testo del corpo → sempre var(--color-ink) su sfondo chiaro (16:1).
+  - Titoli/eyebrow → var(--color-raspberry) va bene anche piccolo, ma
+    SOLO su sfondo pieno (--pdf-paper/--pdf-tint), mai su una tinta
+    dello stesso colore raspberry.
+  - Nei riquadri colorati (callout, box): il TESTO è sempre ink o la
+    variante "-dark" del colore (--color-raspberry-dark,
+    --color-blue-dark); il colore pieno/chiaro resta solo per icone e
+    bordo. Non usare mai lo stesso colore chiaro per sfondo-tinta E
+    testo sopra: è quello che rendeva illeggibile "Nota sulla taglia"
+    (azzurrino su fondo azzurrino) nella prima versione.
+  - Mai usare `opacity` su un testo per attenuarlo: abbassa il
+    contrasto in modo invisibile a chi scrive il CSS. Usa invece
+    --color-ink-muted (colore pieno, contrasto verificato 7.3:1).
+  - var(--color-olive) solo per badge o titoli grandi, mai corpo testo.
+  - var(--color-orange) mai come colore testo: solo sfondi pieni o SVG.
+  - Blocchi pieni (raspberry, ink) → testo SEMPRE var(--color-cream-light)
+    intero, mai con opacity sopra (anche quella abbassa il contrasto).
+  ═══════════════════════════════════════════════════════════════════
+-->
+
+<meta name="description" content="Template riutilizzabile per i pattern PDF di Kiki, Tempo di Gioia." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..900&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/css/style.css" />
+<link rel="stylesheet" href="assets/css/pattern-pdf.css" />
+</head>
+<body>
+
+<div class="pdf-toolbar no-print">
+  <span>Anteprima template — questa barra non viene stampata</span>
+  <button onclick="window.print()">Esporta / Stampa PDF</button>
+</div>
+
+<div class="pdf-viewport">
+
+  <!-- ============================================================ -->
+  <!-- PAGINA 1 — COVER                                              -->
+  <!-- ============================================================ -->
+  <section class="pdf-page pdf-cover">
+    <svg class="flower-deco" style="width:260px;height:260px;top:-60px;left:-60px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g><ellipse cx="50" cy="22" rx="17" ry="24"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(72 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(144 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(216 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(288 50 50)"/></g></svg>
+    <svg class="flower-deco" style="width:200px;height:200px;bottom:-50px;right:-50px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g><ellipse cx="50" cy="22" rx="17" ry="24"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(72 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(144 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(216 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(288 50 50)"/></g></svg>
+
+    <div class="pdf-cover-brand">Kiki<small>Tempo di Gioia</small></div>
+
+    <div>
+      <div class="pdf-cover-photo"><span class="pdf-photo-caption">Foto prodotto finito<br/>(sostituisci con immagine reale, verticale, alta risoluzione)</span></div>
+      <span class="pdf-cover-sub">Pattern all'uncinetto — Edizione digitale</span>
+      <h1 class="pdf-cover-title">Borsa<br/>Girasole</h1>
+      <div class="pdf-meta-row">
+        <span class="pdf-meta-badge">Tecnica: Uncinetto</span>
+        <span class="pdf-meta-badge">Livello: Intermedio</span>
+        <span class="pdf-meta-badge">Taglia: Unica</span>
+        <span class="pdf-meta-badge">Tempo: ~6 ore</span>
+      </div>
+    </div>
+
+    <div class="pdf-cover-footer">Prima edizione — [Mese Anno] · © Kiki, Tempo di Gioia · Pattern N. 001</div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- PAGINA 2 — INDICE + BENVENUTA + LICENZA                       -->
+  <!-- ============================================================ -->
+  <section class="pdf-page">
+    <div class="pdf-runhead">
+      <span class="brand">Kiki, Tempo di Gioia</span>
+      <span class="section">Borsa Girasole</span>
+    </div>
+
+    <div class="pdf-page-body">
+      <div class="pdf-cols-2">
+        <div>
+          <span class="pdf-eyebrow">Benvenuta</span>
+          <h2 class="pdf-h2">Grazie di cuore.</h2>
+          <p class="pdf-lede">Questo pattern nasce da tante sere passate a sperimentare punti e forme, con l'idea di regalarti un progetto che sia bello da fare quanto da indossare. Ho scritto ogni passaggio pensando a te: chiaro, senza fretta, con tutte le foto che mi sarebbe piaciuto avere io la prima volta. Buon lavoro, e soprattutto buon divertimento.</p>
+          <p class="pdf-body-text" style="margin-top:18px"><em>— Kiki</em></p>
+
+          <div style="margin-top:28px">
+            <span class="pdf-eyebrow">Legenda simboli</span>
+            <div class="pdf-legend">
+              <div class="pdf-legend-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.5h6c0-1.1.4-1.9 1-2.5A6 6 0 0 0 12 3Z"/></svg>
+                <span>Consiglio pratico di Kiki</span>
+              </div>
+              <div class="pdf-legend-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M10 9l5 3-5 3V9Z"/></svg>
+                <span>Video tutorial disponibile</span>
+              </div>
+              <div class="pdf-legend-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg>
+                <span>Nota importante, non saltare</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <span class="pdf-eyebrow">Indice</span>
+          <ul class="pdf-index-list">
+            <li><span class="num">01</span><span>Materiali e info tecniche</span><span>3</span></li>
+            <li><span class="num">02</span><span>Schema e misure</span><span>4</span></li>
+            <li><span class="num">03</span><span>Istruzioni passo-passo</span><span>5–6</span></li>
+            <li><span class="num">04</span><span>Finiture e cura del capo</span><span>7</span></li>
+            <li><span class="num">05</span><span>Grazie e un piccolo regalo</span><span>8</span></li>
+          </ul>
+
+          <div class="pdf-box" style="margin-top:24px">
+            <h3 class="pdf-h3">Uso di questo pattern</h3>
+            <ul>
+              <li>Per uso personale: non condividere, rivendere o ripubblicare questo PDF, le foto o il testo.</li>
+              <li>Puoi vendere i capi finiti realizzati da questo pattern, online o ai mercatini — grazie di citare "Kiki, Tempo di Gioia" come designer originale.</li>
+              <li>Domande o difficoltà con un passaggio? Scrivimi su Instagram <strong>@kiki.tempodigioia</strong>, ti rispondo io.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pdf-footer">
+      <span class="pdf-footer-left">
+        <svg class="flower" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g><ellipse cx="50" cy="22" rx="17" ry="24"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(72 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(144 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(216 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(288 50 50)"/></g></svg>
+        © Kiki, Tempo di Gioia — kiki.tempodigioia
+      </span>
+      <span>2 / 8</span>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- PAGINA 3 — MATERIALI & INFO TECNICHE                          -->
+  <!-- ============================================================ -->
+  <section class="pdf-page">
+    <div class="pdf-runhead">
+      <span class="brand">Kiki, Tempo di Gioia</span>
+      <span class="section">Borsa Girasole</span>
+    </div>
+
+    <div class="pdf-page-body">
+      <span class="pdf-eyebrow">01 — Prima di iniziare</span>
+      <h2 class="pdf-h2">Materiali e info tecniche</h2>
+
+      <table class="pdf-table">
+        <caption>Cosa ti serve</caption>
+        <thead><tr><th>Materiale</th><th>Dettaglio</th></tr></thead>
+        <tbody>
+          <tr><td>Filato</td><td>[Nome filato], Cotone misto — 200g totali</td></tr>
+          <tr><td>Uncinetto</td><td>3,5 mm</td></tr>
+          <tr><td>Accessori</td><td>Ago da lana, forbici, 4 marcatori di maglia, bottone magnetico</td></tr>
+          <tr><td>Campione</td><td>10x10 cm = 18 maglie x 14 righe in punto basso</td></tr>
+        </tbody>
+      </table>
+
+      <table class="pdf-table">
+        <caption>Abbreviazioni usate in questo pattern</caption>
+        <thead><tr><th>Sigla</th><th>Significato</th><th>Sigla</th><th>Significato</th></tr></thead>
+        <tbody>
+          <tr><td>cat.</td><td>Catenella</td><td>mb</td><td>Maglia bassa</td></tr>
+          <tr><td>mbr</td><td>Maglia bassissima</td><td>mag.</td><td>Maglia/maglie</td></tr>
+          <tr><td>rip.</td><td>Ripeti da *</td><td>giro</td><td>Giro di lavorazione</td></tr>
+        </tbody>
+      </table>
+
+      <table class="pdf-table">
+        <caption>Taglie e misure finali</caption>
+        <thead><tr><th>Taglia</th><th>Larghezza</th><th>Altezza</th><th>Manico</th></tr></thead>
+        <tbody>
+          <tr><td>Unica</td><td>22 cm</td><td>12 cm</td><td>70 cm</td></tr>
+        </tbody>
+      </table>
+
+      <div class="pdf-callout pdf-callout--note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg>
+        <div><strong>Nota sulla taglia</strong>Questo pattern è pensato per una taglia unica, ma puoi adattare le misure seguendo il tuo campione: aumenta o riduci le catenelle di partenza mantenendo lo stesso rapporto larghezza/altezza.</div>
+      </div>
+    </div>
+
+    <div class="pdf-footer">
+      <span class="pdf-footer-left">
+        <svg class="flower" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g><ellipse cx="50" cy="22" rx="17" ry="24"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(72 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(144 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(216 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(288 50 50)"/></g></svg>
+        © Kiki, Tempo di Gioia — kiki.tempodigioia
+      </span>
+      <span>3 / 8</span>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- PAGINA 4 — SCHEMA E MISURE                                    -->
+  <!-- ============================================================ -->
+  <section class="pdf-page">
+    <div class="pdf-runhead">
+      <span class="brand">Kiki, Tempo di Gioia</span>
+      <span class="section">Borsa Girasole</span>
+    </div>
+
+    <div class="pdf-page-body">
+      <span class="pdf-eyebrow">02 — Prima di iniziare</span>
+      <h2 class="pdf-h2">Schema e misure</h2>
+      <p class="pdf-body-text" style="margin-bottom:16px">Ecco come si compone la borsa: base, corpo lavorato in tondo e manico. Tieni questa pagina a portata di mano mentre lavori i primi giri.</p>
+
+      <div class="pdf-diagram">Schema tecnico della borsa<br/>(sostituisci con il tuo disegno/illustrazione con le misure indicate)</div>
+
+      <div class="pdf-callout pdf-callout--tip" style="margin-top:20px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.5h6c0-1.1.4-1.9 1-2.5A6 6 0 0 0 12 3Z"/></svg>
+        <div><strong>Il consiglio di Kiki</strong>Appoggia il lavoro piatto ogni 4-5 giri per controllare che i lati siano dritti: se noti che si allarga o si stringe, è il momento più facile per correggere.</div>
+      </div>
+    </div>
+
+    <div class="pdf-footer">
+      <span class="pdf-footer-left">
+        <svg class="flower" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g><ellipse cx="50" cy="22" rx="17" ry="24"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(72 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(144 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(216 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(288 50 50)"/></g></svg>
+        © Kiki, Tempo di Gioia — kiki.tempodigioia
+      </span>
+      <span>4 / 8</span>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- PAGINA 5 — ISTRUZIONI (parte 1)                               -->
+  <!-- ============================================================ -->
+  <section class="pdf-page">
+    <div class="pdf-runhead">
+      <span class="brand">Kiki, Tempo di Gioia</span>
+      <span class="section">Borsa Girasole</span>
+    </div>
+
+    <div class="pdf-page-body">
+      <span class="pdf-eyebrow">03 — Lavorazione</span>
+      <h2 class="pdf-h2">Istruzioni passo-passo</h2>
+
+      <div class="pdf-step">
+        <div class="pdf-step-num">1</div>
+        <div>
+          <h4>La base</h4>
+          <p>Fai un nodo scorsoio e monta 38 catenelle. Lavora 2 giri di maglia bassa andata e ritorno: questa striscia sarà la base della borsa.</p>
+          <span class="pdf-video-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M10 9l5 3-5 3V9Z"/></svg>Guarda il video</span>
+        </div>
+        <div class="pdf-step-photo">Foto passo 1</div>
+      </div>
+
+      <div class="pdf-step">
+        <div class="pdf-step-num">2</div>
+        <div>
+          <h4>Il corpo, in tondo</h4>
+          <p>Lavora 3 maglie basse nell'angolo, prosegui lungo il lato lungo della base, ripeti nell'angolo opposto e chiudi con una maglia bassissima. Da qui prosegui in tondo, girando il lavoro a ogni giro, per 18 giri totali.</p>
+          <div class="pdf-callout pdf-callout--note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg>
+            <div><strong>Non saltare</strong>Segna sempre la prima maglia del giro con un marcatore: è il modo più semplice per non perdere il conto.</div>
+          </div>
+        </div>
+        <div class="pdf-step-photo">Foto passo 2</div>
+      </div>
+
+      <div class="pdf-step">
+        <div class="pdf-step-num">3</div>
+        <div>
+          <h4>Il manico</h4>
+          <p>Sul lato opposto a dove hai interrotto il filo, monta 70 catenelle e lavora un giro di maglia bassa. Chiudi con una maglia bassissima nel corpo della borsa, dal lato opposto.</p>
+        </div>
+        <div class="pdf-step-photo">Foto passo 3</div>
+      </div>
+    </div>
+
+    <div class="pdf-footer">
+      <span class="pdf-footer-left">
+        <svg class="flower" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g><ellipse cx="50" cy="22" rx="17" ry="24"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(72 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(144 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(216 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(288 50 50)"/></g></svg>
+        © Kiki, Tempo di Gioia — kiki.tempodigioia
+      </span>
+      <span>5 / 8</span>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- PAGINA 6 — ISTRUZIONI (parte 2)                               -->
+  <!-- ============================================================ -->
+  <section class="pdf-page">
+    <div class="pdf-runhead">
+      <span class="brand">Kiki, Tempo di Gioia</span>
+      <span class="section">Borsa Girasole</span>
+    </div>
+
+    <div class="pdf-page-body">
+      <span class="pdf-eyebrow">03 — Lavorazione (continua)</span>
+      <h2 class="pdf-h2">Rifinitura del manico</h2>
+
+      <div class="pdf-step">
+        <div class="pdf-step-num">4</div>
+        <div>
+          <h4>Cucitura e chiusura</h4>
+          <p>Con l'ago da lana, usa i fili lasciati al passo 2 per cucire il manico al corpo della borsa, controllando che non sia attorcigliato. Nascondi tutti i fili rimasti.</p>
+          <p>È il momento di aggiungere un'eventuale chiusura: io uso un bottone magnetico cucito all'interno.</p>
+          <span class="pdf-video-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M10 9l5 3-5 3V9Z"/></svg>Guarda il video</span>
+        </div>
+        <div class="pdf-step-photo">Foto passo 4</div>
+      </div>
+
+      <div class="pdf-callout pdf-callout--tip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.5h6c0-1.1.4-1.9 1-2.5A6 6 0 0 0 12 3Z"/></svg>
+        <div><strong>Personalizzala</strong>Puoi decorare l'esterno con applicazioni, ricami o charm — non ci sono limiti. Nella mia versione ho aggiunto due fiocchetti laterali.</div>
+      </div>
+    </div>
+
+    <div class="pdf-footer">
+      <span class="pdf-footer-left">
+        <svg class="flower" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g><ellipse cx="50" cy="22" rx="17" ry="24"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(72 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(144 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(216 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(288 50 50)"/></g></svg>
+        © Kiki, Tempo di Gioia — kiki.tempodigioia
+      </span>
+      <span>6 / 8</span>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- PAGINA 7 — FINITURE E CURA                                    -->
+  <!-- ============================================================ -->
+  <section class="pdf-page">
+    <div class="pdf-runhead">
+      <span class="brand">Kiki, Tempo di Gioia</span>
+      <span class="section">Borsa Girasole</span>
+    </div>
+
+    <div class="pdf-page-body">
+      <span class="pdf-eyebrow">04 — A lavoro finito</span>
+      <h2 class="pdf-h2">Finiture e cura del capo</h2>
+
+      <div class="pdf-cols-2">
+        <div>
+          <h3 class="pdf-h3">Rifinitura finale</h3>
+          <p class="pdf-body-text">Nascondi con cura tutti i fili rimasti usando l'ago da lana, facendoli passare all'interno delle maglie per almeno 5 cm. Se il lavoro risulta irregolare, un blocco leggero a vapore aiuta le maglie ad assestarsi.</p>
+
+          <h3 class="pdf-h3" style="margin-top:18px">Cura nel tempo</h3>
+          <p class="pdf-body-text">Lava a mano in acqua fredda con un detergente delicato. Non strizzare: tampona con un asciugamano e fai asciugare in piano, lontano da fonti di calore dirette.</p>
+        </div>
+
+        <div class="pdf-box">
+          <h3 class="pdf-h3">Piccoli problemi, soluzioni veloci</h3>
+          <ul>
+            <li><strong>La borsa si allarga a imbuto:</strong> probabilmente stai aumentando senza accorgertene — conta le maglie ogni giro.</li>
+            <li><strong>Il manico è attorcigliato:</strong> prima di cucirlo, stendilo su un piano e controlla che non faccia una torsione completa.</li>
+            <li><strong>Il tessuto è troppo rigido:</strong> prova un uncinetto di mezzo punto più grande, oppure allenta leggermente la tensione.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="pdf-footer">
+      <span class="pdf-footer-left">
+        <svg class="flower" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g><ellipse cx="50" cy="22" rx="17" ry="24"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(72 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(144 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(216 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(288 50 50)"/></g></svg>
+        © Kiki, Tempo di Gioia — kiki.tempodigioia
+      </span>
+      <span>7 / 8</span>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- PAGINA 8 — GRAZIE + BONUS                                     -->
+  <!-- ============================================================ -->
+  <section class="pdf-page">
+    <div class="pdf-runhead">
+      <span class="brand">Kiki, Tempo di Gioia</span>
+      <span class="section">Borsa Girasole</span>
+    </div>
+
+    <div class="pdf-page-body">
+      <div class="pdf-thanks-hero">
+        <span class="pdf-eyebrow" style="justify-content:center">05 — Prima di salutarci</span>
+        <h2 class="pdf-h2">Complimenti, hai finito!</h2>
+        <p class="pdf-lede" style="margin-inline:auto">Sono davvero felice che tu abbia scelto questo pattern e ancora di più che tu sia arrivata fin qui. Ecco un ultimo consiglio e un piccolo pensiero da parte mia.</p>
+      </div>
+
+      <div class="pdf-callout pdf-callout--tip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.5h6c0-1.1.4-1.9 1-2.5A6 6 0 0 0 12 3Z"/></svg>
+        <div><strong>Il consiglio di Kiki, per la prossima volta</strong>Se hai lavorato con l'uncinetto per la prima volta su un progetto in tondo, prova la tecnica dell'amigurumi per i prossimi accessori: usa la stessa logica di questa borsa ma con maglie più fitte, perfetta per pupazzetti e portachiavi.</div>
+      </div>
+
+      <div class="pdf-coupon">
+        <div>
+          <div class="pdf-coupon-label">Un piccolo regalo per te</div>
+          <div class="pdf-coupon-code">GRAZIE15</div>
+        </div>
+        <div class="pdf-coupon-terms">15% di sconto sul tuo prossimo pattern Kiki. Valido 30 giorni da oggi.</div>
+      </div>
+
+      <div class="pdf-social-cta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+        <div>
+          <h3 class="pdf-h3" style="margin:0">Condividi la tua creazione</h3>
+          <p>Tagga <strong>@kiki.tempodigioia</strong> con l'hashtag <strong>#kikitempodigioia</strong>: ogni mese scelgo le mie foto preferite da mostrare nelle storie e nella newsletter.</p>
+        </div>
+      </div>
+
+      <p class="pdf-signoff">Fatto con cura, un punto alla volta. — Kiki</p>
+    </div>
+
+    <div class="pdf-footer">
+      <span class="pdf-footer-left">
+        <svg class="flower" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><g><ellipse cx="50" cy="22" rx="17" ry="24"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(72 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(144 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(216 50 50)"/><ellipse cx="50" cy="22" rx="17" ry="24" transform="rotate(288 50 50)"/></g></svg>
+        © Kiki, Tempo di Gioia — kiki.tempodigioia
+      </span>
+      <span>8 / 8</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
